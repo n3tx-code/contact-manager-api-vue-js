@@ -29,11 +29,12 @@ import axios from 'axios'
 
 export default Vue.extend({
   name: 'LoginForm',
-  data(): {login_email: string, login_pwd: string, error_msg: string}{
+  data(): {login_email: string, login_pwd: string, error_msg: string, token: string}{
     return {
       login_email: '',
       login_pwd: '',
       error_msg: '',
+      token: '',
     };
   },
   methods:
@@ -47,10 +48,12 @@ export default Vue.extend({
       axios.post('http://contact-manager/user/login/', formData)
       .then(function (response) {
         console.log(response.data);
+        this.token = response.data;
       })
       .catch(function (error) {
         console.log('Erreur de réseau');
       });
+      console.log(this.token);
     },
   },
 });
