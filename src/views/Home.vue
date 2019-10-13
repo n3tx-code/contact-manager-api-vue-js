@@ -1,18 +1,23 @@
 <template>
-  <div class="home">
-    <img alt="Vue logo" src="../assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js + TypeScript App"/>
+  <div id="home">
+    <h1 class="text-center">
+      Contact Manager VueJS
+    </h1>
+    <h3 class="text-center">
+      L'outil qui vous permet d'avoir une vue complète de vos contacts
+    </h3>
+    <home-form></home-form>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
-import HelloWorld from '@/components/HelloWorld.vue'; // @ is an alias to /src
+import HomeForm from '@/components/HomeForm.vue'; // @ is an alias to /src
 
 export default Vue.extend({
   name: 'home',
   components: {
-    HelloWorld,
+    HomeForm,
   },
 });
 </script>
