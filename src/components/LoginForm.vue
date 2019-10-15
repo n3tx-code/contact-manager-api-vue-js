@@ -17,19 +17,22 @@
           </div>
           <input v-model="login_pwd" type="password" class="form-control" placeholder="Mot de passe" required>
         </div>
+        <div id="error-msg" class="bg-danger text-white text-center animated bounceIn" v-if="error_msg">
+          {{ error_msg }}
+        </div>
         <button type="submit" class="btn btn-contact-manager btn-block">Connexion <i class="fas fa-rocket animated "></i></button>
-        <div id="error-msg" v-if="error_msg">{{ error_msg }}</div>
     </form>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
-import axios from 'axios'
+import axios from 'axios';
+import router from '@/router';
 
 export default Vue.extend({
   name: 'LoginForm',
-  data(): {login_email: string, login_pwd: string, error_msg: string, token: string}{
+  data(): {login_email: string, login_pwd: string, error_msg: string, token: string} {
     return {
       login_email: '',
       login_pwd: '',
@@ -39,21 +42,30 @@ export default Vue.extend({
   },
   methods:
   {
-    submitLoginForm(): void
-    {
-      var formData = new FormData();
+    setTokenCookie(token: string): void {
+      const expireData = new Date();
+      expireData.setTime(expireData.getTime() + (365 * 24 * 60 * 60 * 1000));
+      const expires = 'expires=' + expireData.toUTCString();
+      document.cookie = JSON.stringify({token: token}) + ';' + expires + ';';
+      router.push({name: 'contact-manager'});
+    },
+    submitLoginForm(): void {
+      const formData = new FormData();
       formData.append('email', this.login_email);
-      formData.append('pwd', this.login_pwd);  
+      formData.append('pwd', this.login_pwd);
 
       axios.post('http://contact-manager/user/login/', formData)
-      .then(function (response) {
-        console.log(response.data);
-        this.token = response.data;
+      .then((response) => {
+        if (response.data.hasOwnProperty('error')) {
+            this.error_msg = response.data['error'];
+        }
+        else {
+            this.setTokenCookie(response.data);
+        }
       })
-      .catch(function (error) {
-        console.log('Erreur de réseau');
+      .catch((error) => {
+        this.error_msg = 'Erreur de réseau';
       });
-      console.log(this.token);
     },
   },
 });
@@ -63,5 +75,10 @@ export default Vue.extend({
 form
 {
   padding : 20px;
+}
+#error-msg
+{
+  margin-bottom: 15px;
+  padding: 4px;
 }
 </style>

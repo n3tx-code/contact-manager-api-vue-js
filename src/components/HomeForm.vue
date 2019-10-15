@@ -34,6 +34,7 @@
 import Vue from 'vue';
 import LogInForm from '@/components/LoginForm.vue';
 import SigInForm from '@/components/SigInForm.vue';
+import router from '@/router';
 
 export default Vue.extend({
     name: 'home-form',
@@ -49,22 +50,30 @@ export default Vue.extend({
         SigInForm,
     },
     methods: {
-        showLoginForm(): void
-        {
+        detectIfCookieIsSet(): void {
+            if (document.cookie.length > 0) {
+                const dataFromCookie = JSON.parse(document.cookie);
+                if (dataFromCookie.hasOwnProperty('token')) {
+                    router.push({name: 'ContactManagerApp'});
+                }
+            }
+        },
+        showLoginForm(): void {
             this.login_selected = true;
             this.title = 'Connexion';
         },
-        showSignInForm(): void
-        {
+        showSignInForm(): void {
             this.sigIn_selected = true;
             this.title = 'Inscription';
         },
-        backToFormChoises(): void
-        {
+        backToFormChoises(): void {
             this.login_selected = false;
             this.sigIn_selected = false;
             this.title = 'Inscription et connexion';
-        }
+        },
+    },
+    beforeMount() {
+        this.detectIfCookieIsSet();
     },
 });
 </script>

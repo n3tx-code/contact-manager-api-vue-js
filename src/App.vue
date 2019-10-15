@@ -12,6 +12,7 @@ body, html
 {
   background: #f0f0f0;
   font-family: 'Montserrat', sans-serif;
+  padding-bottom: 20px;
 }
 .row
 {
