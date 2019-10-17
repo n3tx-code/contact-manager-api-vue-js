@@ -1,5 +1,5 @@
 <template>
-  <div id="login-form" class="col-10 offset-1">
+  <div id="login-form" class="col-12">
     <form @submit.prevent="submitLoginForm()">
         <label>Email :</label>
         <div class="input-group mb-3">
@@ -27,8 +27,9 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import axios from 'axios';
 import router from '@/router';
+
+import axios from 'axios';
 
 export default Vue.extend({
   name: 'LoginForm',
@@ -47,7 +48,7 @@ export default Vue.extend({
       expireData.setTime(expireData.getTime() + (365 * 24 * 60 * 60 * 1000));
       const expires = 'expires=' + expireData.toUTCString();
       document.cookie = JSON.stringify({token: token}) + ';' + expires + ';';
-      router.push({name: 'contact-manager'});
+      router.push({name: 'ContactManagerApp'});
     },
     submitLoginForm(): void {
       const formData = new FormData();
@@ -78,7 +79,7 @@ form
 }
 #error-msg
 {
-  margin-bottom: 15px;
-  padding: 4px;
+    margin-bottom: 15px;
+    padding: 4px;
 }
 </style>

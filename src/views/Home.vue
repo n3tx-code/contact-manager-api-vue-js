@@ -1,11 +1,11 @@
 <template>
   <div id="home">
     <h1 class="text-center">
-      Contact Manager VueJS
+      Contact Manager
     </h1>
-    <h3 class="text-center">
+    <h4 class="text-center">
       L'outil qui vous permet d'avoir une vue complète de vos contacts
-    </h3>
+    </h4>
     <home-form></home-form>
   </div>
 </template>

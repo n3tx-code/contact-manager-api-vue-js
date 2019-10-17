@@ -1,6 +1,6 @@
 <template>
-  <div id="sigin-form" class="col-10 offset-1">
-    <form>
+  <div id="sigin-form" class="col-12">
+    <form @submit.prevent="submitSignInForm()">
         <div class="form-group">
             <label>Adresse mail :</label>
             <input v-model="email" type="email" class="form-control" placeholder="Email" required>
@@ -21,13 +21,21 @@
         <div id="error-msg" class="bg-danger text-white text-center animated bounceIn" v-if="error_msg">
           {{ error_msg }}
         </div>
-        
-        <button v-if="this.pwdAreSame && this.emailAreSame" type="submit" class="btn btn-contact-manager btn-block">Inscription</button>
-        <div v-else class="row">
-          <div class=" col-10 offset-1 bg-warning text-white text-center animated bounceIn item-different">
-            {{ error_msg_not_same }}
+        <div v-if="this.signInSucces">
+          <div class="row">
+            <div class="col-12 bg-success text-white text-center" id="success-msg">
+              Merci pour votre Inscription. Vous pouvez maintenant vous connecter.
+            </div>
           </div>
         </div>
+        <button v-else-if="this.pwdAreSame && this.emailAreSame" type="submit" class="btn btn-contact-manager btn-block">Inscription</button>
+        <div v-else class="row">
+          <div 
+            class=" col-10 offset-1 bg-warning text-white text-center animated bounceIn item-different"
+            id="error-msg">
+            {{ errorMsgNotSame }}
+          </div>
+        </div>       
         
     </form>
   </div>
@@ -37,9 +45,12 @@
 import Vue from 'vue';
 import router from '@/router';
 
+import axios from 'axios';
+
 export default Vue.extend({
   name: 'SignInForm',
-  data(): {email: string, emailConfirmation: string, emailAreSame: boolean,  pwd: string, pwdConfirmation: string, pwdAreSame: boolean, error_msg_not_same: string,
+  data(): {email: string, emailConfirmation: string, emailAreSame: boolean,  pwd: string,
+   pwdConfirmation: string, pwdAreSame: boolean, errorMsgNotSame: string, signInSucces: boolean,
    error_msg: string, token: string} {
     return {
       email: '',
@@ -48,31 +59,50 @@ export default Vue.extend({
       pwd: '',
       pwdConfirmation: '',
       pwdAreSame: true,
-      error_msg_not_same: 'Des champs sont différents',
+      errorMsgNotSame: 'Des champs sont différents',
       error_msg: '',
       token: '',
+      signInSucces: false,
     };
   },
   methods: {
-    compareEmail()
-    {
+    compareEmail(): void {
       if(this.email === this.emailConfirmation) {
         this.emailAreSame = true;
       }
       else {
         this.emailAreSame = false;
-        this.error_msg_not_same = 'Adresse mail différentes';
+        this.errorMsgNotSame = 'Adresse mail différentes';
       }
     },
-    comparePwd()
-    {
+    comparePwd(): void {
       if(this.pwd === this.pwdConfirmation) {
         this.pwdAreSame = true;
       }
       else {
         this.pwdAreSame = false;
-        this.error_msg_not_same = 'Mot de passe différents';
+        this.errorMsgNotSame = 'Mot de passe différents';
       }
+    },
+    submitSignInForm(): void {
+      const formData = new FormData();
+      formData.append('email1', this.email);
+      formData.append('email2', this.emailConfirmation);
+      formData.append('pwd1', this.pwd);
+      formData.append('pwd2', this.pwdConfirmation);
+
+      axios.post('http://contact-manager/user/signin/', formData)
+      .then((response) => {
+        if (response.data.hasOwnProperty('error')) {
+            this.error_msg = response.data['error'];
+        }
+        else {
+            this.signInSucces = true;
+        }
+      })
+      .catch((error) => {
+        this.error_msg = 'Erreur de réseau';
+      });
     }
   }
   
@@ -88,5 +118,10 @@ export default Vue.extend({
   {
     margin-top : 10px;
     padding: 10px;
+  }
+  #error-msg, #success-msg
+  {
+      margin-bottom: 15px;
+      padding: 4px;
   }
 </style>
