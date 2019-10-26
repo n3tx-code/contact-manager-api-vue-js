@@ -12,7 +12,7 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import HomeForm from '@/components/HomeForm.vue'; // @ is an alias to /src
+import HomeForm from '@/components/HomeForm.vue'; 
 
 export default Vue.extend({
   name: 'home',

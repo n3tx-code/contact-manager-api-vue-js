@@ -19,9 +19,6 @@ body, html
   margin-left: 0;
   margin-right: 0; 
 }
-#app {
-  margin-top : 20px;
-}
 .btn-contact-manager
 {
   background-color: #0db0d3;
