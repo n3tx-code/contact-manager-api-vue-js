@@ -77,7 +77,7 @@ form
 {
   padding : 20px;
 }
-#error-msg
+#error-msg, #success-msg
 {
     margin-bottom: 15px;
     padding: 4px;

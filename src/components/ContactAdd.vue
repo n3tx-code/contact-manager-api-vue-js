@@ -15,7 +15,7 @@
               <div class="input-group-prepend">
                 <span class="input-group-text"><i class="fas fa-user"></i></span>
               </div>
-              <input type="text" class="form-control" placeholder="Prénom" required v-model="name">
+              <input type="text" class="form-control" placeholder="Prénom" required  v-model="forName">
             </div>
 
             <label>Nom :</label>
@@ -23,7 +23,7 @@
               <div class="input-group-prepend">
                 <span class="input-group-text"><i class="fas fa-user"></i></span>
               </div>
-              <input type="text" class="form-control" placeholder="Nom" v-model="forname">
+              <input type="text" class="form-control" placeholder="Nom" v-model="name">
             </div>
 
             <label>Téléphone professionnel :</label>
@@ -94,17 +94,21 @@
                 </div>
               </div>
               <div class="form-group">
-                <label for="exampleFormControlFile1">Photo du contact :</label>
-                <input type="file" class="form-control-file" id="contact-img">
+                <label >Photo du contact :</label>
+                <input type="file" class="form-control-file" id="contact-img" @change="handelUploadFileType()">
+                <small>Type de fichier supportés : .png et .jpeg</small>
+              </div>
+              <div id="error-msg" class="bg-danger text-white text-center animated bounceIn" v-if="error_msg">
+                {{ error_msg }}
               </div>
           </div>
           <div class="modal-footer">
             <div class="row col-12">
               <div class="col-6">
-                <button type="button" class="btn btn-secondary float-left" data-dismiss="modal">Fermer</button>
+                <button type="button" class="btn btn-secondary btn-block" data-dismiss="modal">Fermer</button>
               </div>
-              <div class="col-6">
-                <button type="submit" class="btn btn-contact-manager">Ajouter <i class="fas fa-plus-circle"></i></button>
+              <div class="col-6" v-if="this.showBtnSubmit">
+                <button type="submit" class="btn btn-contact-manager btn-block">Ajouter <i class="fas fa-plus-circle"></i></button>
               </div>
             </div>
           </div>
@@ -119,14 +123,16 @@ import axios from 'axios';
 
 export default Vue.extend({
     name: 'contact-add',
-    data(): {moreDetails: boolean, option_txt: string, name?: string, forname: string, phonePro?: number, 
+    data(): {moreDetails: boolean, showBtnSubmit: boolean, error_msg: string, option_txt: string, name?: string, forName: string, phonePro?: number, 
     phonePerso?: number, emailPro?: string, emailPerso?: string, linkendin?: string, facebook?: string, 
     twitter?: string, website?: string} {
         return {
             moreDetails: false,
+            showBtnSubmit: true,
+            error_msg: '',
             option_txt: 'Plus d\'options <i class="fas fa-caret-down"></i>',
             name: undefined,
-            forname: '',
+            forName: '',
             phonePro: undefined,
             phonePerso: undefined,
             emailPro: undefined,
@@ -136,6 +142,12 @@ export default Vue.extend({
             twitter: undefined,
             website: undefined,
         };
+    },
+    props:
+    {
+      token: String,  
+      setSuccessMsg: Function,
+      closeAddContactModal: Function,
     },
     methods: {
         toggleOptions(): void {
@@ -152,31 +164,102 @@ export default Vue.extend({
         submitContactAddForm(): void {
           const imgContactInput = document.getElementById('contact-img');
           const formData = new FormData();
-          // todo check every input is not undefined
-          formData.append('forname', this.forname);
-          formData.append('phonePro', this.phonePro);
-          formData.append('phonePerso', this.phonePerso);
-          formData.append('emailPro', this.emailPro);
-          formData.append('emailPerso', this.emailPerso);
-          formData.append('linkendin', this.linkendin);
-          formData.append('facebook', this.facebook);
-          formData.append('twitter', this.twitter);
-          formData.append('website', this.website);
-          formData.append('imgContact', imgContactInput.files[0]);
-            
+
+          formData.append('forName', this.forName);
+          formData.append('token', this.$props.token);
           
+          if(typeof this.name != 'undefined') {
+            formData.append('name', this.name);
+          }
+          if(typeof this.phonePro != 'undefined') {
+            formData.append('phonePro', String(this.phonePro));
+          }
+          if(typeof this.phonePerso != 'undefined') {
+            formData.append('phonePerso', String(this.phonePerso));
+          }
+          if(typeof this.emailPro != 'undefined') {
+            formData.append('emailPro', String(this.emailPro));
+          }
+          if(typeof this.emailPerso != 'undefined') {
+            formData.append('emailPerso', String(this.emailPerso));
+          }
+          if(typeof this.linkendin != 'undefined') {
+            formData.append('linkendin', String(this.linkendin));
+          }
+          if(typeof this.facebook != 'undefined') {
+            formData.append('facebook', String(this.facebook));
+          }
+          if(typeof this.twitter != 'undefined') {
+            formData.append('twitter', String(this.twitter));
+          }
+          if(typeof this.website != 'undefined') {
+            formData.append('website', String(this.website));
+          }
+          if(typeof imgContactInput.files[0] != 'undefined' || imgContactInput.files[0] != null) {
+            formData.append('imgContact', imgContactInput.files[0]);
+          }
 
           axios.post('http://contact-manager/contact/add/', formData)
             .then((response) => {
-              console.log(response);
+              if (response.data.hasOwnProperty('error')) {
+                this.error_msg = response.data['error'];
+              }
+              else {
+                if(response.data == "Contact added")
+                {
+                    this.error_msg = '';
+                    this.$props.closeAddContactModal();
+                    this.$props.setSuccessMsg(this.forName + " a été ajouté.");
+                    this.forName = '';
+                    this.name= undefined;
+                    this.phonePro = undefined;
+                    this.phonePerso = undefined;
+                    this.emailPro = undefined;
+                    this.emailPerso = undefined;
+                    this.linkendin = undefined;
+                    this.facebook = undefined;
+                    this.twitter = undefined;
+                    this.website = undefined;
+                }
+                else
+                {
+                  this.error_msg = 'Erreur lors de la création du contact';
+                }
+              }
             })
             .catch((error) => {
-              // this.error_msg = 'Erreur de réseau';
               console.log(error);
+              this.error_msg = 'Erreur de réseau';
             });
+        },
+        handelUploadFileType(): void
+        {
+          const imgContactInput = document.getElementById('contact-img');
+          if(typeof imgContactInput.files[0] != 'undefined' || imgContactInput.files[0] != null)
+          {
+            const type = imgContactInput.files[0].type;
+            switch(type) {
+              case 'image/png':
+                this.showBtnSubmit = true;
+                this.error_msg = '';
+                break;
+              case 'image/jpeg':
+                this.showBtnSubmit = true;
+                this.error_msg = '';
+                break;
+              default:
+                this.error_msg = 'Type de fichier non supporté';
+                this.showBtnSubmit = false;
+            } 
+          }
+          else
+          {
+            this.showBtnSubmit = true;
+            this.error_msg = '';
+          }
         }
     },
-});
+  });
 </script>
 
 <style scoped lang="scss">

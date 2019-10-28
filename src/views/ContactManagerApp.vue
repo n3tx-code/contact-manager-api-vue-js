@@ -29,9 +29,12 @@
       </div>
     </div>  
   
-    <button type="button" class="btn btn-block btn-contact-manager" data-toggle="modal" data-target="#exampleModalLong">Ajouter un contact</button>
-    <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
-      <contact-add></contact-add>
+    <button type="button" class="btn btn-block btn-contact-manager" data-toggle="modal" data-target="#addContactModal">Ajouter un contact</button>
+    <div class="modal fade" id="addContactModal" tabindex="-1" role="dialog">
+      <contact-add v-bind:token=this.token v-bind:setSuccessMsg=this.setSuccessMsg v-bind:closeAddContactModal=this.closeAddContactModal></contact-add>
+    </div>
+    <div v-if="this.sucessMessage" class="bg-success text-white text-center" id="success-msg">
+      {{ this.sucessMessage }}
     </div>
   </div>
 </div>
@@ -43,9 +46,10 @@ import ContactAdd from '@/components/ContactAdd.vue';
 
 export default Vue.extend({
   name: 'ContactManagerApp',
-  data(): {token: string} {
+  data(): {token: string, sucessMessage: string} {
     return {
       token: '',
+      sucessMessage: '',
     };
   },
   components: {
@@ -67,6 +71,29 @@ export default Vue.extend({
         router.push({name: 'home'});
       }
     },
+    setSuccessMsg(msg: string): void
+    {
+      this.sucessMessage = msg;
+    },
+    closeAddContactModal(): void
+    {
+      const modal = document.getElementById('addContactModal');
+      if(modal != null)
+      {
+        modal.classList.remove('show');
+        modal.setAttribute('aria-hidden', 'true');
+        modal.setAttribute('style', 'display: none');
+
+        // get modal backdrops
+        const modalsBackdrops = document.getElementsByClassName('modal-backdrop');
+
+        // remove every modal backdrop
+        for(let i=0; i<modalsBackdrops.length; i++) {
+          document.body.removeChild(modalsBackdrops[i]);
+        }
+      }
+    }
+
   },
   beforeMount() {
         this.getToken();
@@ -95,6 +122,12 @@ export default Vue.extend({
   {
     border-top-right-radius : 5px;
     border-bottom-right-radius : 5px; 
+  }
+  #success-msg
+  {
+      margin-bottom: 15px;
+      margin-top : 15px;
+      padding: 4px;
   }
   @media screen and (min-width: 992px)
   {
