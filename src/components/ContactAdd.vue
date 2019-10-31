@@ -148,6 +148,7 @@ export default Vue.extend({
       token: String,  
       setSuccessMsg: Function,
       closeAddContactModal: Function,
+      updateContacts: Function,
     },
     methods: {
         toggleOptions(): void {
@@ -205,6 +206,7 @@ export default Vue.extend({
                 this.error_msg = response.data['error'];
               }
               else {
+                console.log(response.data);
                 if(response.data == "Contact added")
                 {
                     this.error_msg = '';
@@ -220,6 +222,7 @@ export default Vue.extend({
                     this.facebook = undefined;
                     this.twitter = undefined;
                     this.website = undefined;
+                    this.$props.updateContacts();
                 }
                 else
                 {
@@ -228,7 +231,6 @@ export default Vue.extend({
               }
             })
             .catch((error) => {
-              console.log(error);
               this.error_msg = 'Erreur de réseau';
             });
         },

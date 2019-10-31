@@ -29,12 +29,8 @@
       </div>
     </div>  
   
-    <button type="button" class="btn btn-block btn-contact-manager" data-toggle="modal" data-target="#addContactModal">Ajouter un contact</button>
-    <div class="modal fade" id="addContactModal" tabindex="-1" role="dialog">
-      <contact-add v-bind:token=this.token v-bind:setSuccessMsg=this.setSuccessMsg v-bind:closeAddContactModal=this.closeAddContactModal></contact-add>
-    </div>
-    <div v-if="this.sucessMessage" class="bg-success text-white text-center" id="success-msg">
-      {{ this.sucessMessage }}
+    <div class="wrapper-fluid">
+      <contact-list v-bind:token=this.token></contact-list>
     </div>
   </div>
 </div>
@@ -42,18 +38,17 @@
 <script lang="ts">
 import Vue from 'vue';
 import router from '@/router';
-import ContactAdd from '@/components/ContactAdd.vue'; 
+import ContactList from '@/components/ContactList.vue'; 
 
 export default Vue.extend({
   name: 'ContactManagerApp',
-  data(): {token: string, sucessMessage: string} {
+  data(): {token: string} {
     return {
       token: '',
-      sucessMessage: '',
     };
   },
   components: {
-    ContactAdd,
+    ContactList,
   },
   methods: 
   {
@@ -71,28 +66,6 @@ export default Vue.extend({
         router.push({name: 'home'});
       }
     },
-    setSuccessMsg(msg: string): void
-    {
-      this.sucessMessage = msg;
-    },
-    closeAddContactModal(): void
-    {
-      const modal = document.getElementById('addContactModal');
-      if(modal != null)
-      {
-        modal.classList.remove('show');
-        modal.setAttribute('aria-hidden', 'true');
-        modal.setAttribute('style', 'display: none');
-
-        // get modal backdrops
-        const modalsBackdrops = document.getElementsByClassName('modal-backdrop');
-
-        // remove every modal backdrop
-        for(let i=0; i<modalsBackdrops.length; i++) {
-          document.body.removeChild(modalsBackdrops[i]);
-        }
-      }
-    }
 
   },
   beforeMount() {

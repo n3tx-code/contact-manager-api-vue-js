@@ -1,23 +1,121 @@
 <template>
   <div id="contact-list">
+    <button type="button" class="btn btn-block btn-contact-manager" data-toggle="modal" data-target="#addContactModal">Ajouter un contact</button>
+    <div class="modal fade" id="addContactModal" tabindex="-1" role="dialog">
+      <contact-add v-bind:token=this.token v-bind:setSuccessMsg=this.setSuccessMsg
+       v-bind:closeAddContactModal=this.closeAddContactModal
+       v-bind:updateContacts=this.getContacts></contact-add>
+    </div>
+    <div v-if="this.sucessMessage" class="bg-success text-white text-center" id="success-msg">
+      {{ this.sucessMessage }}
+    </div>
 
+    <contact-item v-for="contact in contacts" :key="contact.ID" :contact="contact"></contact-item>
+
+    <div id="error-msg" class="bg-danger text-white text-center animated bounceIn" v-if="error_msg">
+        {{ error_msg }}
+    </div>
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
-
+import axios from 'axios';
+import Contact from '@/models/contact.ts';
+import ContactItem from '@/components/ContactItem.vue';
+import ContactAdd from '@/components/ContactAdd.vue'; 
 
 export default Vue.extend({
     name: 'contact-list',
-    data(): {} {
+    components: {
+        ContactItem,
+        ContactAdd,
+    },
+    data(): {error_msg: String, sucessMessage: String, contacts:Array<Contact>, modifyContact?: Object} {
         return {
-            
+            error_msg: '',
+            sucessMessage: '',
+            contacts: Array<Contact>(),
+            modifyContact: undefined,
         };
     },
-    methods: {
-        
+    props:
+    {
+      token: String,  
     },
+    methods: {
+        getContacts() : void {
+          this.contacts = [];
+          const formData = new FormData();
+
+          formData.append('token', this.$props.token);
+          axios.post('http://contact-manager/contact/get/', formData)
+            .then((response) => {
+              if (response.data.hasOwnProperty('error')) {
+                this.error_msg = response.data['error'];
+              }
+              else {
+                if(response.data.lenght < 1)
+                {
+                  // todo show msg add contact
+                }
+                else
+                {                  
+                  response.data.forEach((c: String) =>
+                  {
+                    let contact = <Contact>{};
+                    contact.ID = c['ID'];
+                    contact.ID_owner = c['ID_Owner'];
+                    contact.forname = c['forname'];
+                    contact.name = c['name'];
+                    contact.phonePro = c['phonePro'];
+                    contact.phonePerso = c['phonePerso'];
+                    contact.emailPro = c['emailPro'];
+                    contact.emailPerso = c['emailPerso'];
+                    contact.linkendin = c['linkendin'];
+                    contact.facebook = c['facebook'];
+                    contact.twitter = c['twitter'];
+                    contact.website = c['website'];
+                    contact.imgContact = c['img'];
+                    contact.lastModificationDate = c['lastModificationDate'];
+                    
+                    this.contacts.push(contact);
+                  });
+                }
+              }
+            })
+            .catch((error) => {
+              console.log(error);
+              this.error_msg = 'Erreur de réseau';
+            });
+        },
+        setSuccessMsg(msg: string): void
+        {
+          this.sucessMessage = msg;
+        },
+        closeAddContactModal(): void
+        {
+          const modal = document.getElementById('addContactModal');
+          if(modal != null)
+          {
+            modal.classList.remove('show');
+            modal.setAttribute('aria-hidden', 'true');
+            modal.removeAttribute('aria-modal');
+            modal.setAttribute('style', 'display: none');
+            document.body.classList.remove('modal-open');
+            document.body.removeAttribute("style");
+
+            const modalsBackdrops = document.getElementsByClassName('modal-backdrop');
+
+            for(let i=0; i<modalsBackdrops.length; i++) {
+              document.body.removeChild(modalsBackdrops[i]);
+            }
+          }
+        }
+    },
+    beforeMount() {
+      this.getContacts();
+    }
 });
 </script>
 
