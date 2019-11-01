@@ -123,8 +123,8 @@ import axios from 'axios';
 
 export default Vue.extend({
     name: 'contact-add',
-    data(): {moreDetails: boolean, showBtnSubmit: boolean, error_msg: string, option_txt: string, name?: string, forName: string, phonePro?: number, 
-    phonePerso?: number, emailPro?: string, emailPerso?: string, linkendin?: string, facebook?: string, 
+    data(): {moreDetails: boolean, showBtnSubmit: boolean, error_msg: string, option_txt: string, name?: string, forName: string, phonePro?: string, 
+    phonePerso?: string, emailPro?: string, emailPerso?: string, linkendin?: string, facebook?: string, 
     twitter?: string, website?: string} {
         return {
             moreDetails: false,
@@ -206,7 +206,6 @@ export default Vue.extend({
                 this.error_msg = response.data['error'];
               }
               else {
-                console.log(response.data);
                 if(response.data == "Contact added")
                 {
                     this.error_msg = '';

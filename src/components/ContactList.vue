@@ -3,14 +3,16 @@
     <button type="button" class="btn btn-block btn-contact-manager" data-toggle="modal" data-target="#addContactModal">Ajouter un contact</button>
     <div class="modal fade" id="addContactModal" tabindex="-1" role="dialog">
       <contact-add v-bind:token=this.token v-bind:setSuccessMsg=this.setSuccessMsg
-       v-bind:closeAddContactModal=this.closeAddContactModal
-       v-bind:updateContacts=this.getContacts></contact-add>
+       v-bind:closeAddContactModal=this.closeAddContactModal v-bind:updateContacts=this.getContacts></contact-add>
+      
     </div>
     <div v-if="this.sucessMessage" class="bg-success text-white text-center" id="success-msg">
       {{ this.sucessMessage }}
     </div>
-
-    <contact-item v-for="contact in contacts" :key="contact.ID" :contact="contact"></contact-item>
+    <div v-if="contacts.length == 0">
+      <h2 class="text-center no-contact-title">Auncu contact enregistré</h2>
+    </div>
+    <contact-item v-for="contact in contacts" :key="contact.ID" :contact="contact" v-bind:token=token v-bind:setSuccessMsg=setSuccessMsg v-bind:updateContacts=getContacts></contact-item>
 
     <div id="error-msg" class="bg-danger text-white text-center animated bounceIn" v-if="error_msg">
         {{ error_msg }}
@@ -54,40 +56,41 @@ export default Vue.extend({
               if (response.data.hasOwnProperty('error')) {
                 this.error_msg = response.data['error'];
               }
-              else {
-                if(response.data.lenght < 1)
+              else {      
+                response.data.forEach((c: String) =>
                 {
-                  // todo show msg add contact
-                }
-                else
-                {                  
-                  response.data.forEach((c: String) =>
-                  {
-                    let contact = <Contact>{};
-                    contact.ID = c['ID'];
-                    contact.ID_owner = c['ID_Owner'];
-                    contact.forname = c['forname'];
-                    contact.name = c['name'];
-                    contact.phonePro = c['phonePro'];
-                    contact.phonePerso = c['phonePerso'];
-                    contact.emailPro = c['emailPro'];
-                    contact.emailPerso = c['emailPerso'];
-                    contact.linkendin = c['linkendin'];
-                    contact.facebook = c['facebook'];
-                    contact.twitter = c['twitter'];
-                    contact.website = c['website'];
-                    contact.imgContact = c['img'];
-                    contact.lastModificationDate = c['lastModificationDate'];
-                    
-                    this.contacts.push(contact);
-                  });
-                }
+                  let contact = <Contact>{};
+                  contact.ID = c['ID'];
+                  contact.ID_owner = c['ID_owner'];
+                  contact.forname = c['forname'];
+                  contact.name = this.setToUndefinedIfNull(c['name']);
+                  contact.phonePro = this.setToUndefinedIfNull(c['phonePro']);
+                  contact.phonePerso = this.setToUndefinedIfNull(c['phonePerso']);
+                  contact.emailPro = this.setToUndefinedIfNull(c['emailPro']);
+                  contact.emailPerso = this.setToUndefinedIfNull(c['emailPerso']);
+                  contact.linkendin = this.setToUndefinedIfNull(c['linkendin']);
+                  contact.facebook = this.setToUndefinedIfNull(c['facebook']);
+                  contact.twitter = this.setToUndefinedIfNull(c['twitter']);
+                  contact.website = this.setToUndefinedIfNull(c['website']);
+                  contact.imgContact = this.setToUndefinedIfNull(c['img']);
+                  contact.lastModificationDate = c['lastModification'];
+                  
+                  this.contacts.push(contact);
+                });
               }
             })
             .catch((error) => {
               console.log(error);
               this.error_msg = 'Erreur de réseau';
             });
+        },
+        setToUndefinedIfNull(str: string)
+        {
+          if(str == null)
+          {
+            return undefined;
+          }
+          return str
         },
         setSuccessMsg(msg: string): void
         {
@@ -120,5 +123,8 @@ export default Vue.extend({
 </script>
 
 <style scoped lang="scss">
-    
+    .no-contact-title
+    {
+      margin-top : 20px;
+    }
 </style>

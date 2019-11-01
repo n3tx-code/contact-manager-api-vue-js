@@ -2,8 +2,7 @@
   <div class="contact-wrapper">
     <div class="row">
       <div class="col-12" :style="'background-color : #' + color + ';'" :class="'text-' + textColor + ' text-center contact-initials'">
-          <button type="button" class="btn btn-contact-edit float-right" data-toggle="modify-modal"><h4><i class="fas fa-edit"
-          @click="modifyContactBtn(contact)"></i></h4></button>
+          <contact-modify :contact="contact" :token="token" v-bind:setSuccessMsg=this.setSuccessMsg v-bind:updateContacts=this.updateContacts></contact-modify>
           <h2>{{ initials }}</h2>
       </div>
     </div>
@@ -53,17 +52,22 @@
         </div>
       </div>
     </div>
+    
   </div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
 import Contact from '@/models/contact.ts'
+import ContactModify from '@/components/ContactModify.vue';
 
 const tinycolor = require("tinycolor2");
 
 export default Vue.extend({
     name: 'contact-display',
+    components: {
+        ContactModify,
+    },
     data(): {color: String, textColor: String, initials: String} {
         return {
             color : '#333',
@@ -75,6 +79,9 @@ export default Vue.extend({
     {
       contact: Object as () => Contact,
       modifyContactBtn: Function,  
+      token: String,
+      setSuccessMsg: Function,
+      updateContacts: Function,
     },
     methods: {
       hashCode(str: string): Number { 
