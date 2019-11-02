@@ -75,7 +75,6 @@ export default Vue.extend({
                 }
                 else
                 {
-                  console.log(response.data)
                   this.error_msg = 'Erreur lors de la suppression du contact';
                 }
               }
