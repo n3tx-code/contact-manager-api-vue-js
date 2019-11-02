@@ -51,7 +51,10 @@
           </div>
         </div>
       </div>
-      <small class="contact-last-modification">Dernière modification : {{ getLastModificationDate() }}</small>
+      <div class="col-12 contact-footer">
+        <contact-delete :contact="contact" :token="token" v-bind:setSuccessMsg=this.setSuccessMsg v-bind:updateContacts=this.updateContacts></contact-delete>
+        <small class="contact-last-modification">Dernière modification : {{ getLastModificationDate() }}</small>
+      </div>
     </div>
     
   </div>
@@ -61,6 +64,7 @@
 import Vue from 'vue';
 import Contact from '@/models/contact.ts'
 import ContactModify from '@/components/ContactModify.vue';
+import ContactDelete from '@/components/ContactDelete.vue';
 
 const tinycolor = require("tinycolor2");
 
@@ -68,6 +72,7 @@ export default Vue.extend({
     name: 'contact-display',
     components: {
         ContactModify,
+        ContactDelete
     },
     data(): {color: String, textColor: String, initials: String} {
         return {
@@ -174,9 +179,11 @@ export default Vue.extend({
   } 
   .contact-last-modification
   {
-    margin-left: 20px;
+    font-style: italic;
+  }
+  .contact-footer
+  {
     margin-top: -20px;
     margin-bottom: 10px;
-    font-style: italic;
   }
 </style>

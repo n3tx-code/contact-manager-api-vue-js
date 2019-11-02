@@ -1,6 +1,6 @@
 <template>
 <div class="contact-modify">
-    <button type="button" class="btn btn-contact-edit float-right text-white" data-toggle="modify-modal" @click=displayModal()>
+    <button type="button" class="btn btn-contact-edit float-right text-white" @click=displayModal()>
         <h4>
             <i class="fas fa-edit"></i>
         </h4>
@@ -82,7 +82,7 @@
                 <div class="input-group-prepend">
                 <span class="input-group-text"><i class="fab fa-twitter"></i></span>
                 </div>
-                <input type="text" class="form-control" placeholder="Twitter" value="contact.twitter">
+                <input type="text" class="form-control" placeholder="Twitter" v-model="contact.twitter">
             </div>
 
             <label>Url :</label>
@@ -239,9 +239,6 @@ export default Vue.extend({
             });
         },
     },
-    beforeMount() {
-      
-    }
 });
 </script>
 
