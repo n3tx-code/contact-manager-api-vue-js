@@ -12,5 +12,5 @@ export default interface Contact {
     twitter?: string;
     website?: string;
     imgContact?: string;
-    lastModificationDate: Date;
+    lastModification: Date;
 }

@@ -73,7 +73,7 @@ export default Vue.extend({
                   contact.twitter = this.setToUndefinedIfNull(c['twitter']);
                   contact.website = this.setToUndefinedIfNull(c['website']);
                   contact.imgContact = this.setToUndefinedIfNull(c['img']);
-                  contact.lastModificationDate = c['lastModification'];
+                  contact.lastModification = c['lastModification'];
                   
                   this.contacts.push(contact);
                 });

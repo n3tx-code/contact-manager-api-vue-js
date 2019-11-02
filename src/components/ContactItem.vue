@@ -51,6 +51,7 @@
           </div>
         </div>
       </div>
+      <small class="contact-last-modification">Dernière modification : {{ getLastModificationDate() }}</small>
     </div>
     
   </div>
@@ -84,7 +85,7 @@ export default Vue.extend({
       updateContacts: Function,
     },
     methods: {
-      hashCode(str: string): Number { 
+      hashCode(str: string): number { 
         let hash = 0;
         for (let i = 0; i < str.length; i++) {
           hash = str.charCodeAt(i) + ((hash << 5) - hash);
@@ -98,11 +99,11 @@ export default Vue.extend({
         return '00000'.substring(0, 6 - c.length) + c;
       },
       getContactFornameName(): string {
-        let fornNameName = this.contact.forname;
+        let forNameName = this.contact.forname;
         if (this.contact.name) {
-          fornNameName += this.contact.name;
+          forNameName += this.contact.name;
         }
-        return fornNameName;
+        return forNameName;
       },
       setContactInitials(): void {
         let initials = this.contact.forname.charAt(0);
@@ -121,6 +122,12 @@ export default Vue.extend({
 
         this.textColor = textColor;
       },
+      getLastModificationDate(): String
+      {
+        const lastModification = new Date(this.contact.lastModification);
+
+        return lastModification.toLocaleDateString();
+      }
     },
     beforeMount() {
       this.color = this.intToRGB(this.hashCode(this.getContactFornameName()));
@@ -165,4 +172,11 @@ export default Vue.extend({
   {
     color : #0db0d3;
   } 
+  .contact-last-modification
+  {
+    margin-left: 20px;
+    margin-top: -20px;
+    margin-bottom: 10px;
+    font-style: italic;
+  }
 </style>
