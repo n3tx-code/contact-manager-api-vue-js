@@ -53,6 +53,7 @@ export default Vue.extend({
           formData.append('token', this.$props.token);
           axios.post('http://contact-manager/contact/get/', formData)
             .then((response) => {
+              console.log(response.data);
               if (response.data.hasOwnProperty('error')) {
                 this.error_msg = response.data['error'];
               }
