@@ -16,11 +16,11 @@
                     <sig-in-form></sig-in-form>
                 </div>
                 <div v-else class="col-12 row text-center">
-                    <div class="col-6 home-choise border-right" @click="showLoginForm()">
+                    <div class="col-6 home-choise border-right" @click="showLoginForm()" id="home-choise-logIn">
                         <i class="fas fa-sign-in-alt home-choise-icon"></i>
                         <h5 class="home-choise-title">Connexion</h5>
                     </div>
-                    <div class="col-6 home-choise"  @click="showSignInForm()">
+                    <div class="col-6 home-choise"  @click="showSignInForm()" id="home-choise-signIn">
                         <i class="fas fa-user-plus home-choise-icon"></i>
                         <h5 class="home-choise-title">Inscription</h5>
                     </div>
