@@ -6,7 +6,7 @@ Créer un dossier *contact-manager* et un virtual host qui pointe vers celui-ci.
 
 Le code php et la base de données de l'API sont disponibles dans le dépot git suivant :  [https://github.com/n3tx-code/contact-manager-api-php](https://github.com/n3tx-code/contact-manager-api-php).
 
-Le code PHP doit être placé dans le dossier *contact-manager* et la base de données doit être importer via *phpmyadmin*.
+Le code PHP doit être placé dans le dossier *contact-manager* et la base de données doit être importer via *phpmyadmin* sous le nom **contact_manager**.
 
 Il est possible qu'il fasse modifier le fichier *_includes/bdd.php* si l'identifiant vers votre serveur de base de données n'est pas **root** et que le mot de passe n'est pas ***"vide"***.
 
