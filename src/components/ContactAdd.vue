@@ -123,9 +123,9 @@ import axios from 'axios';
 
 export default Vue.extend({
     name: 'contact-add',
-    data(): {moreDetails: boolean, showBtnSubmit: boolean, error_msg: string, option_txt: string, name?: string, forName: string, phonePro?: string, 
-    phonePerso?: string, emailPro?: string, emailPerso?: string, linkendin?: string, facebook?: string, 
-    twitter?: string, website?: string} {
+    data(): {moreDetails: boolean, showBtnSubmit: boolean, error_msg: string, option_txt: string, name?: string,
+    forName: string, phonePro?: string, phonePerso?: string, emailPro?: string, emailPerso?: string, linkendin?: string,
+    facebook?: string, twitter?: string, website?: string} {
         return {
             moreDetails: false,
             showBtnSubmit: true,
@@ -145,19 +145,16 @@ export default Vue.extend({
     },
     props:
     {
-      token: String,  
+      token: String,
       setSuccessMsg: Function,
       closeAddContactModal: Function,
       updateContacts: Function,
     },
     methods: {
         toggleOptions(): void {
-          if(this.moreDetails)
-          {
+          if (this.moreDetails) {
             this.option_txt = 'Plus d\'options <i class="fas fa-caret-down"></i>';
-          }
-          else
-          {
+          } else {
             this.option_txt = 'Moins d\'options <i class="fas fa-caret-up"></i>';
           }
           this.moreDetails = !this.moreDetails;
@@ -168,51 +165,50 @@ export default Vue.extend({
 
           formData.append('forName', this.forName);
           formData.append('token', this.$props.token);
-          
-          if(typeof this.name != 'undefined') {
+          if (typeof this.name !== 'undefined') {
             formData.append('name', this.name);
           }
-          if(typeof this.phonePro != 'undefined') {
+          if (typeof this.phonePro !== 'undefined') {
             formData.append('phonePro', String(this.phonePro));
           }
-          if(typeof this.phonePerso != 'undefined') {
+          if (typeof this.phonePerso !== 'undefined') {
             formData.append('phonePerso', String(this.phonePerso));
           }
-          if(typeof this.emailPro != 'undefined') {
+          if (typeof this.emailPro !== 'undefined') {
             formData.append('emailPro', String(this.emailPro));
           }
-          if(typeof this.emailPerso != 'undefined') {
+          if (typeof this.emailPerso !== 'undefined') {
             formData.append('emailPerso', String(this.emailPerso));
           }
-          if(typeof this.linkendin != 'undefined') {
+          if (typeof this.linkendin !== 'undefined') {
             formData.append('linkendin', String(this.linkendin));
           }
-          if(typeof this.facebook != 'undefined') {
+          if (typeof this.facebook !== 'undefined') {
             formData.append('facebook', String(this.facebook));
           }
-          if(typeof this.twitter != 'undefined') {
+          if (typeof this.twitter !== 'undefined') {
             formData.append('twitter', String(this.twitter));
           }
-          if(typeof this.website != 'undefined') {
+          if (typeof this.website !== 'undefined') {
             formData.append('website', String(this.website));
           }
-          if(typeof imgContactInput.files[0] != 'undefined' || imgContactInput.files[0] != null) {
-            formData.append('imgContact', imgContactInput.files[0]);
+          if (typeof imgContactInput!.files[0] !== 'undefined' || imgContactInput!.files[0] !== null) {
+            formData.append('imgContact', imgContactInput!.files[0]);
           }
 
           axios.post('http://contact-manager/contact/add/', formData)
             .then((response) => {
               if (response.data.hasOwnProperty('error')) {
-                this.error_msg = response.data['error'];
-              }
-              else {
-                if(response.data == "Contact added")
-                {
+                // to avoid warning on run serve
+                const error = 'error';
+                this.error_msg = response.data[error];
+              } else {
+                if (response.data === 'Contact added') {
                     this.error_msg = '';
                     this.$props.closeAddContactModal();
-                    this.$props.setSuccessMsg(this.forName + " a été ajouté.");
+                    this.$props.setSuccessMsg(this.forName + ' a été ajouté.');
                     this.forName = '';
-                    this.name= undefined;
+                    this.name = undefined;
                     this.phonePro = undefined;
                     this.phonePerso = undefined;
                     this.emailPro = undefined;
@@ -222,9 +218,7 @@ export default Vue.extend({
                     this.twitter = undefined;
                     this.website = undefined;
                     this.$props.updateContacts();
-                }
-                else
-                {
+                } else {
                   this.error_msg = 'Erreur lors de la création du contact';
                 }
               }
@@ -233,13 +227,11 @@ export default Vue.extend({
               this.error_msg = 'Erreur de réseau';
             });
         },
-        handelUploadFileType(): void
-        {
+        handelUploadFileType(): void {
           const imgContactInput = document.getElementById('contact-img');
-          if(typeof imgContactInput.files[0] != 'undefined' || imgContactInput.files[0] != null)
-          {
-            const type = imgContactInput.files[0].type;
-            switch(type) {
+          if (typeof imgContactInput!.files[0] !== 'undefined' || imgContactInput!.files[0] !== null) {
+            const type = imgContactInput!.files[0].type;
+            switch (type) {
               case 'image/png':
                 this.showBtnSubmit = true;
                 this.error_msg = '';
@@ -251,16 +243,14 @@ export default Vue.extend({
               default:
                 this.error_msg = 'Type de fichier non supporté';
                 this.showBtnSubmit = false;
-            } 
-          }
-          else
-          {
+            }
+          } else {
             this.showBtnSubmit = true;
             this.error_msg = '';
           }
-        }
-    },
-  });
+        },
+      },
+    });
 </script>
 
 <style scoped lang="scss">

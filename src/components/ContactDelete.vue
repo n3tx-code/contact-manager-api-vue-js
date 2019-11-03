@@ -13,7 +13,7 @@
         </div>
         <h4 class="text-center">Voulez-vous supprimer {{ contact.forname }} ?</h4>
         <div class="row btn-delete-choise">
-          <div class="col-6 col-md3 offset-md3">
+          <div class="col-6 col-md-3 offset-md-3">
               <button type="button" class="btn btn-light btn-block" @click=deleteContact()>Oui</button>
           </div>
           <div class="col-md-3 col-6">
@@ -40,21 +40,19 @@ export default Vue.extend({
     },
     props:
     {
-      token: String,  
+      token: String,
       contact: Object as () => Contact,
       setSuccessMsg: Function,
       updateContacts: Function,
     },
     methods: {
-        displayModal(): void
-        {
+        displayModal(): void {
             this.display = 'block';
         },
         closeModal(): void {
             this.display = 'none';
         },
-        deleteContact(): void
-        {
+        deleteContact(): void {
           const formData = new FormData();
 
           formData.append('ID', this.$props.contact.ID);
@@ -64,17 +62,14 @@ export default Vue.extend({
           axios.post('http://contact-manager/contact/delete/', formData)
             .then((response) => {
               if (response.data.hasOwnProperty('error')) {
-                this.error_msg = response.data['error'];
-              }
-              else {
-                if(response.data == "Contact deleted")
-                {
+                const error = 'error';
+                this.error_msg = response.data[error];
+              } else {
+                if (response.data === 'Contact deleted') {
                     this.updateContacts();
                     this.closeModal();
                     this.setSuccessMsg(this.contact.forname + ' a été supprimé');
-                }
-                else
-                {
+                } else {
                   this.error_msg = 'Erreur lors de la suppression du contact';
                 }
               }
@@ -82,7 +77,7 @@ export default Vue.extend({
             .catch((error) => {
               this.error_msg = 'Erreur de réseau';
             });
-        }
+        },
     },
 });
 </script>

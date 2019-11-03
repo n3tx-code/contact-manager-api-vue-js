@@ -116,9 +116,9 @@ import axios from 'axios';
 
 export default Vue.extend({
     name: 'contact-modify',
-    data(): {display: String, error_msg: String, showBtnSubmit: boolean, name?: string, forname: string, phonePro?: string, 
-    phonePerso?: string, emailPro?: string, emailPerso?: string, linkendin?: string, facebook?: string, 
-    twitter?: string, website?: string} {
+    data(): {display: string, error_msg: string, showBtnSubmit: boolean, name?: string, forname: string,
+     phonePro?: string, phonePerso?: string, emailPro?: string, emailPerso?: string, linkendin?: string,
+     facebook?: string, twitter?: string, website?: string} {
         return {
             display: 'none',
             error_msg: '',
@@ -137,26 +137,23 @@ export default Vue.extend({
     },
     props:
     {
-      token: String,  
+      token: String,
       contact: Object as () => Contact,
       setSuccessMsg: Function,
       updateContacts: Function,
     },
     methods: {
-        displayModal(): void
-        {
+        displayModal(): void {
             this.display = 'block';
         },
         closeModal(): void {
             this.display = 'none';
         },
-        handelUploadFileType(): void
-        {
+        handelUploadFileType(): void {
           const imgContactInput = document.getElementById('contact-img-modify-' + this.$props.contact.ID);
-          if(typeof imgContactInput.files[0] != 'undefined' || imgContactInput.files[0] != null)
-          {
-            const type = imgContactInput.files[0].type;
-            switch(type) {
+          if (typeof imgContactInput!.files[0] !== 'undefined' || imgContactInput!.files[0] !== null) {
+            const type = imgContactInput!.files[0].type;
+            switch (type) {
               case 'image/png':
                 this.showBtnSubmit = true;
                 this.error_msg = '';
@@ -168,10 +165,8 @@ export default Vue.extend({
               default:
                 this.showBtnSubmit = false;
                 this.error_msg = 'Type de fichier non supporté';
-            } 
-          }
-          else
-          {
+            }
+          } else {
             this.error_msg = '';
           }
         },
@@ -183,52 +178,49 @@ export default Vue.extend({
           formData.append('ID_owner', this.$props.contact.ID_owner);
           formData.append('token', this.$props.token);
           formData.append('forName', this.forname);
-          
-          if(typeof this.name != 'undefined') {
+          if (typeof this.name !== 'undefined') {
             formData.append('name', this.name);
           }
-          if(typeof this.phonePro != 'undefined') {
+          if (typeof this.phonePro !== 'undefined') {
             formData.append('phonePro', String(this.phonePro));
           }
-          if(typeof this.phonePerso != 'undefined') {
+          if (typeof this.phonePerso !== 'undefined') {
             formData.append('phonePerso', String(this.phonePerso));
           }
-          if(typeof this.emailPro != 'undefined') {
+          if (typeof this.emailPro !== 'undefined') {
             formData.append('emailPro', String(this.emailPro));
           }
-          if(typeof this.emailPerso != 'undefined') {
+          if (typeof this.emailPerso !== 'undefined') {
             formData.append('emailPerso', String(this.emailPerso));
           }
-          if(typeof this.linkendin != 'undefined') {
+          if (typeof this.linkendin !== 'undefined') {
             formData.append('linkendin', String(this.linkendin));
           }
-          if(typeof this.facebook != 'undefined') {
+          if (typeof this.facebook !== 'undefined') {
             formData.append('facebook', String(this.facebook));
           }
-          if(typeof this.twitter != 'undefined') {
+          if (typeof this.twitter !== 'undefined') {
             formData.append('twitter', String(this.twitter));
           }
-          if(typeof this.website != 'undefined') {
+          if (typeof this.website !== 'undefined') {
             formData.append('website', String(this.website));
           }
-          if(typeof imgContactInput.files[0] != 'undefined' || imgContactInput.files[0] != null) {
-            formData.append('imgContact', imgContactInput.files[0]);
+          if (typeof imgContactInput!.files[0] !== 'undefined' || imgContactInput!.files[0] !== null) {
+            formData.append('imgContact', imgContactInput!.files[0]);
           }
 
           axios.post('http://contact-manager/contact/update/', formData)
             .then((response) => {
               if (response.data.hasOwnProperty('error')) {
-                this.error_msg = response.data['error'];
-              }
-              else {
-                if(response.data == "Contact modified")
-                {
+                // to avoid warning on run serve
+                const error = 'error';
+                this.error_msg = response.data[error];
+              } else {
+                if (response.data === 'Contact modified') {
                     this.updateContacts();
                     this.closeModal();
                     this.setSuccessMsg(this.forname + ' a été modifié');
-                }
-                else
-                {
+                } else {
                   this.error_msg = 'Erreur lors de la modification du contact';
                 }
               }

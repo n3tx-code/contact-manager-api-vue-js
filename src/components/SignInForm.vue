@@ -67,19 +67,17 @@ export default Vue.extend({
   },
   methods: {
     compareEmail(): void {
-      if(this.email === this.emailConfirmation) {
+      if (this.email === this.emailConfirmation) {
         this.emailAreSame = true;
-      }
-      else {
+      } else {
         this.emailAreSame = false;
         this.errorMsgNotSame = 'Adresse mail différentes';
       }
     },
     comparePwd(): void {
-      if(this.pwd === this.pwdConfirmation) {
+      if (this.pwd === this.pwdConfirmation) {
         this.pwdAreSame = true;
-      }
-      else {
+      } else {
         this.pwdAreSame = false;
         this.errorMsgNotSame = 'Mot de passe différents';
       }
@@ -94,18 +92,18 @@ export default Vue.extend({
       axios.post('http://contact-manager/user/signin/', formData)
       .then((response) => {
         if (response.data.hasOwnProperty('error')) {
-            this.error_msg = response.data['error'];
-        }
-        else {
+            // to avoid warning on run serve
+            const error = 'error';
+            this.error_msg = response.data[error];
+        } else {
             this.signInSucces = true;
         }
       })
       .catch((error) => {
         this.error_msg = 'Erreur de réseau';
       });
-    }
-  }
-  
+    },
+  },
 });
 </script>
 

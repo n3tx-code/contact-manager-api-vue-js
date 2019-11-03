@@ -38,7 +38,7 @@
 <script lang="ts">
 import Vue from 'vue';
 import router from '@/router';
-import ContactList from '@/components/ContactList.vue'; 
+import ContactList from '@/components/ContactList.vue';
 
 export default Vue.extend({
   name: 'ContactManagerApp',
@@ -50,19 +50,19 @@ export default Vue.extend({
   components: {
     ContactList,
   },
-  methods: 
+  methods:
   {
     getToken(): void {
       if (document.cookie.length > 0) {
           const dataFromCookie = JSON.parse(document.cookie);
           if (dataFromCookie.hasOwnProperty('token')) {
-              this.token = dataFromCookie['token'];
-          }
-          else {
+              // to avoid warning on run serve
+              const token = 'token';
+              this.token = dataFromCookie[token];
+          } else {
             router.push({name: 'home'});
           }
-      }
-      else {
+      } else {
         router.push({name: 'home'});
       }
     },

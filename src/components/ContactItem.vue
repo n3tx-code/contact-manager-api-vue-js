@@ -62,19 +62,20 @@
 
 <script lang="ts">
 import Vue from 'vue';
-import Contact from '@/models/contact.ts'
+import Contact from '@/models/contact.ts';
 import ContactModify from '@/components/ContactModify.vue';
 import ContactDelete from '@/components/ContactDelete.vue';
+import tinycolor from 'tinycolor2';
 
-const tinycolor = require("tinycolor2");
+// const tinycolor = require("tinycolor2");
 
 export default Vue.extend({
     name: 'contact-display',
     components: {
         ContactModify,
-        ContactDelete
+        ContactDelete,
     },
-    data(): {color: String, textColor: String, initials: String} {
+    data(): {color: string, textColor: string, initials: string} {
         return {
             color : '#333',
             textColor: '',
@@ -84,13 +85,14 @@ export default Vue.extend({
     props:
     {
       contact: Object as () => Contact,
-      modifyContactBtn: Function,  
+      modifyContactBtn: Function,
       token: String,
       setSuccessMsg: Function,
       updateContacts: Function,
     },
     methods: {
-      hashCode(str: string): number { 
+      /* tslint:disable:no-bitwise */
+      hashCode(str: string): number {
         let hash = 0;
         for (let i = 0; i < str.length; i++) {
           hash = str.charCodeAt(i) + ((hash << 5) - hash);
@@ -108,10 +110,10 @@ export default Vue.extend({
         if (this.contact.name) {
           forNameName += this.contact.name;
         }
-        return forNameName;
+        return forNameName!;
       },
       setContactInitials(): void {
-        let initials = this.contact.forname.charAt(0);
+        let initials = this.contact.forname!.charAt(0);
         if (this.contact.name) {
           initials += this.contact.name.charAt(0);
         }
@@ -120,19 +122,17 @@ export default Vue.extend({
       setTextColorInitials(): void {
         let textColor = 'white';
         const bgColor = tinycolor(this.color);
-        
         if (bgColor.isLight()) {
           textColor = 'dark';
         }
 
         this.textColor = textColor;
       },
-      getLastModificationDate(): String
-      {
+      getLastModificationDate(): string {
         const lastModification = new Date(this.contact.lastModification);
 
         return lastModification.toLocaleDateString();
-      }
+      },
     },
     beforeMount() {
       this.color = this.intToRGB(this.hashCode(this.getContactFornameName()));

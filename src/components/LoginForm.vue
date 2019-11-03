@@ -47,7 +47,7 @@ export default Vue.extend({
       const expireData = new Date();
       expireData.setTime(expireData.getTime() + (365 * 24 * 60 * 60 * 1000));
       const expires = 'expires=' + expireData.toUTCString();
-      document.cookie = JSON.stringify({token: token}) + ';' + expires + ';';
+      document.cookie = JSON.stringify({token}) + ';' + expires + ';';
       router.push({name: 'ContactManagerApp'});
     },
     submitLoginForm(): void {
@@ -58,9 +58,10 @@ export default Vue.extend({
       axios.post('http://contact-manager/user/login/', formData)
       .then((response) => {
         if (response.data.hasOwnProperty('error')) {
-            this.error_msg = response.data['error'];
-        }
-        else {
+            // to avoid warning on run serve
+            const error = 'error';
+            this.error_msg = response.data[error];
+        } else {
             this.setTokenCookie(response.data);
         }
       })
