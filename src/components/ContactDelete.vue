@@ -83,25 +83,24 @@ export default Vue.extend({
 </script>
 
 <style scoped lang="scss">
-    .modal {
-  display: block; 
-  position: fixed; 
-  z-index: 2; 
+.modal {
+  display: block;
+  position: fixed;
+  z-index: 2;
   left: 0;
   top: 0;
-  width: 100%; 
-  height: 100%; 
-  overflow: auto; 
-  background-color: rgb(0,0,0); 
-  background-color: rgba(0,0,0,0.4); 
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.4);
 }
 
-
 .modal-content {
-  margin: 5% auto; 
+  margin: 5% auto;
   padding: 20px;
   border: 1px solid #888;
-  width: 90%; 
+  width: 90%;
 }
 
 .close {
@@ -116,9 +115,9 @@ export default Vue.extend({
   color: black;
   text-decoration: none;
   cursor: pointer;
-} 
-.btn-delete-choise
-{
+}
+
+.btn-delete-choise {
   margin-top: 30px;
   margin-bottom: 20px;
 }

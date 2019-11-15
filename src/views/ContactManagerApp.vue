@@ -74,39 +74,37 @@ export default Vue.extend({
 });
 </script>
 <style scoped lang="scss">
-  .contact-manager-navbar
-  {
-    background-color : #0db0d3;
+.contact-manager-navbar {
+  background-color: #0db0d3;
+}
+
+.navbar-light .navbar-toggler {
+  color: #fff;
+  border: none;
+}
+
+#app-wrapper {
+  margin-top: 20px;
+}
+
+#contact-search {
+  margin-bottom: 20px;
+}
+
+#btn-contact-search {
+  border-top-right-radius: 5px;
+  border-bottom-right-radius: 5px;
+}
+
+#success-msg {
+  margin-bottom: 15px;
+  margin-top: 15px;
+  padding: 4px;
+}
+
+@media screen and (min-width: 992px) {
+  .nav-logout {
+    float: right;
   }
-  .navbar-light .navbar-toggler
-  {
-    color : #fff;
-    border: none;
-  }
-  #app-wrapper
-  {
-    margin-top: 20px;
-  }
-  #contact-search
-  {
-    margin-bottom: 20px;
-  }
-  #btn-contact-search
-  {
-    border-top-right-radius : 5px;
-    border-bottom-right-radius : 5px; 
-  }
-  #success-msg
-  {
-      margin-bottom: 15px;
-      margin-top : 15px;
-      padding: 4px;
-  }
-  @media screen and (min-width: 992px)
-  {
-    .nav-logout
-      {
-        float : right;
-      }
-  }
+}
 </style>

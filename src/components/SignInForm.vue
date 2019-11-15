@@ -108,18 +108,18 @@ export default Vue.extend({
 </script>
 
 <style scoped lang="scss">
-  form
-  {
-    padding: 20px;
-  }
-  .item-different
-  {
-    margin-top : 10px;
-    padding: 10px;
-  }
-  #error-msg, #success-msg
-  {
-      margin-bottom: 15px;
-      padding: 4px;
-  }
+form {
+  padding: 20px;
+}
+
+.item-different {
+  margin-top: 10px;
+  padding: 10px;
+}
+
+#error-msg,
+#success-msg {
+  margin-bottom: 15px;
+  padding: 4px;
+}
 </style>

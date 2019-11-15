@@ -143,47 +143,47 @@ export default Vue.extend({
 </script>
 
 <style scoped lang="scss">
-  .contact-forname:first-letter {
-    text-transform:capitalize;
-  }
-  .contact-wrapper
-  {
-    background: #fff;
-    margin-top: 40px;
-    margin-bottom: 40px;
-    border-radius: 5px;
-    box-shadow: 0px 0px 10px #333;
-  }
-  .contact-content
-  {
-    padding : 20px;
-  }
-  .contact-initials
-  {
-    padding-top: 4%;
-    padding-bottom: 4%; 
-  }
-  .contact-row
-  {
-    padding-bottom: 20px;
-    margin-bottom: 20px;
-    word-wrap: break-word;
-  }
-  a
-  {
-    color : initial;
-  }
-  a:hover
-  {
-    color : #0db0d3;
-  } 
-  .contact-last-modification
-  {
-    font-style: italic;
-  }
-  .contact-footer
-  {
-    margin-top: -20px;
-    margin-bottom: 10px;
-  }
+.contact-forname:first-letter {
+  text-transform: capitalize;
+}
+
+.contact-wrapper {
+  background: #fff;
+  margin-top: 40px;
+  margin-bottom: 40px;
+  border-radius: 5px;
+  box-shadow: 0px 0px 10px #333;
+}
+
+.contact-content {
+  padding: 20px;
+}
+
+.contact-initials {
+  padding-top: 4%;
+  padding-bottom: 4%;
+}
+
+.contact-row {
+  padding-bottom: 20px;
+  margin-bottom: 20px;
+  word-wrap: break-word;
+}
+
+a {
+  color: initial;
+}
+
+a:hover {
+  color: #0db0d3;
+}
+
+.contact-last-modification {
+  font-style: italic;
+}
+
+.contact-footer {
+  margin-top: -20px;
+  margin-bottom: 10px;
+}
 </style>

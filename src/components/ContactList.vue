@@ -130,8 +130,7 @@ export default Vue.extend({
 </script>
 
 <style scoped lang="scss">
-    .no-contact-title
-    {
-      margin-top : 20px;
-    }
+.no-contact-title {
+  margin-top: 20px;
+}
 </style>

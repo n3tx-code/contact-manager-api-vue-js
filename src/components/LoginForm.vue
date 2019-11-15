@@ -74,13 +74,13 @@ export default Vue.extend({
 </script>
 
 <style scoped lang="scss">
-form
-{
-  padding : 20px;
+form {
+  padding: 20px;
 }
-#error-msg, #success-msg
-{
-    margin-bottom: 15px;
-    padding: 4px;
+
+#error-msg,
+#success-msg {
+  margin-bottom: 15px;
+  padding: 4px;
 }
 </style>

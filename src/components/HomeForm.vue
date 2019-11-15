@@ -80,56 +80,53 @@ export default Vue.extend({
 </script>
 
 <style scoped lang="scss">
-    #home-form
-    {
-        margin-top: 50px;
-        
-    }
-    #home-form-wrapper
-    {
-        box-shadow: 0px 0px 10px #a2a2a2;
-        padding: 0px;
-        border-radius: 30px;
-    }
-    #home-form-header
-    {
-        background-image: linear-gradient(to bottom right, #0db0d3, #9c32fe);
-        padding: 30px;
-        border-top-left-radius: 30px;
-        border-top-right-radius: 30px;
-    }
-    .home-form-border-bottom
-    {
-        border-bottom-left-radius: 30px;
-        border-bottom-right-radius: 30px;
-    }
-    .home-choise-icon
-    {
-        font-size: 50px;
-    }
-    .home-choise
-    {
-        margin-top: 40px;
-        margin-bottom : 40px;
-        cursor: pointer;
-    }
-    .home-choise:hover
-    {
-        color : #0db0d3;
-    }
-    .home-choise-title
-    {
-        margin-top: 20px;
-    }
-    .home-form-back
-    {
-        font-size: 25px;
-        margin-top: 5px;
-        cursor: pointer;
-    }
-    .home-form-back:hover
-    {
-        color : #0db0d3;
-    }
-    
+#home-form {
+  margin-top: 50px;
+}
+
+#home-form-wrapper {
+  box-shadow: 0px 0px 10px #a2a2a2;
+  padding: 0px;
+  border-radius: 30px;
+}
+
+#home-form-header {
+  background-image: linear-gradient(to bottom right, #0db0d3, #9c32fe);
+  padding: 30px;
+  border-top-left-radius: 30px;
+  border-top-right-radius: 30px;
+}
+
+.home-form-border-bottom {
+  border-bottom-left-radius: 30px;
+  border-bottom-right-radius: 30px;
+}
+
+.home-choise-icon {
+  font-size: 50px;
+}
+
+.home-choise {
+  margin-top: 40px;
+  margin-bottom: 40px;
+  cursor: pointer;
+}
+
+.home-choise:hover {
+  color: #0db0d3;
+}
+
+.home-choise-title {
+  margin-top: 20px;
+}
+
+.home-form-back {
+  font-size: 25px;
+  margin-top: 5px;
+  cursor: pointer;
+}
+
+.home-form-back:hover {
+  color: #0db0d3;
+}
 </style>
