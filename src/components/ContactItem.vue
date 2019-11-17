@@ -1,5 +1,5 @@
 <template>
-  <div class="contact-wrapper">
+  <div class="contact-wrapper" v-if="show">
     <div class="row">
       <div class="col-12" :style="'background-color : #' + color + ';'" :class="'text-' + textColor + ' text-center contact-initials'">
           <contact-modify :contact="contact" :token="token" v-bind:setSuccessMsg=this.setSuccessMsg v-bind:updateContacts=this.updateContacts></contact-modify>
@@ -75,11 +75,12 @@ export default Vue.extend({
         ContactModify,
         ContactDelete,
     },
-    data(): {color: string, textColor: string, initials: string} {
+    data(): {color: string, textColor: string, initials: string, show: boolean} {
         return {
             color : '#333',
             textColor: '',
             initials: '',
+            show: true,
         };
     },
     props:
@@ -89,6 +90,7 @@ export default Vue.extend({
       token: String,
       setSuccessMsg: Function,
       updateContacts: Function,
+      rechercheString: String,
     },
     methods: {
       /* tslint:disable:no-bitwise */
@@ -133,11 +135,22 @@ export default Vue.extend({
 
         return lastModification.toLocaleDateString();
       },
+      isInReSearch(): void {
+        if (this.$props.rechercheString.trim().length > 0) {
+
+          if (this.$props.contact.forname.toUpperCase().includes(this.$props.rechercheString.toUpperCase())) {
+            this.show = true;
+          } else {
+            this.show = false;
+          }
+        }
+      },
     },
     beforeMount() {
       this.color = this.intToRGB(this.hashCode(this.getContactFornameName()));
       this.setTextColorInitials();
       this.setContactInitials();
+      this.isInReSearch();
     },
 });
 </script>

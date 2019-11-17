@@ -1,5 +1,13 @@
 <template>
   <div id="contact-list">
+    <div class="input-group mb-3">
+      <input type="text" class="form-control" placeholder="Rechercher un contract" v-model="rechercheString" 
+      @keyup="getContacts()">
+      <div class="input-group-append">
+        <span class="input-group-text"><i class="fas fa-search"></i></span>
+      </div>
+    </div>
+
     <button type="button" class="btn btn-block btn-contact-manager" data-toggle="modal" data-target="#addContactModal">Ajouter un contact</button>
     <div class="modal fade" id="addContactModal" tabindex="-1" role="dialog">
       <contact-add v-bind:token=this.token v-bind:setSuccessMsg=this.setSuccessMsg
@@ -12,7 +20,9 @@
     <div v-if="contacts.length == 0">
       <h2 class="text-center no-contact-title">Auncu contact enregistré</h2>
     </div>
-    <contact-item v-for="contact in contacts" :key="contact.ID" :contact="contact" v-bind:token=token v-bind:setSuccessMsg=setSuccessMsg v-bind:updateContacts=getContacts></contact-item>
+    <contact-item v-for="contact in contacts" :key="contact.ID" :contact="contact" v-bind:token=token
+     v-bind:setSuccessMsg=setSuccessMsg v-bind:updateContacts=getContacts :rechercheString="rechercheString">
+    </contact-item>
 
     <div id="error-msg" class="bg-danger text-white text-center animated bounceIn" v-if="error_msg">
         {{ error_msg }}
@@ -33,10 +43,11 @@ export default Vue.extend({
         ContactItem,
         ContactAdd,
     },
-    data(): {error_msg: string, sucessMessage: string, contacts: Contact[]} {
+    data(): {error_msg: string, sucessMessage: string, rechercheString: string, contacts: Contact[]} {
         return {
             error_msg: '',
             sucessMessage: '',
+            rechercheString : '',
             contacts: Array<Contact>(),
         };
     },

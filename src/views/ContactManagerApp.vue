@@ -19,15 +19,7 @@
       </ul>
     </div>
   </nav>
-  <div class="container" id="app-wrapper">
-    <div id="contact-search">
-      <div class="input-group">
-        <input type="text" class="form-control" placeholder="Rechercher un contact">
-        <div class="input-group-prepend">
-          <button type="button" class="btn btn-contact-manager" id="btn-contact-search"><i class="fas fa-search"></i></button>
-        </div>
-      </div>
-    </div>  
+  <div class="container" id="app-wrapper"> 
   
     <div class="wrapper-fluid">
       <contact-list v-bind:token=this.token></contact-list>
@@ -89,15 +81,6 @@ export default Vue.extend({
 
 #app-wrapper {
   margin-top: 20px;
-}
-
-#contact-search {
-  margin-bottom: 20px;
-}
-
-#btn-contact-search {
-  border-top-right-radius: 5px;
-  border-bottom-right-radius: 5px;
 }
 
 #success-msg {
