@@ -14,7 +14,7 @@
       </ul>
       <ul class="navbar-nav nav-logout">
         <li class="nav-item">
-          <span class="nav-link text-white">Déconnexion</span>
+          <span class="nav-link text-white" @click="logOut()">Déconnexion</span>
         </li>
       </ul>
     </div>
@@ -66,7 +66,11 @@ export default Vue.extend({
         router.push({name: 'home'});
       }
     },
-
+    logOut(): void {
+      const expires = 'expires=Thu, 01 Jan 1970 00:00:00 UTC';
+      document.cookie = JSON.stringify('null') + ';' + expires + ';';
+      router.push({name: 'home'});
+    },
   },
   beforeMount() {
         this.getToken();
@@ -100,6 +104,10 @@ export default Vue.extend({
   margin-bottom: 15px;
   margin-top: 15px;
   padding: 4px;
+}
+
+.nav-logout {
+  cursor: pointer;
 }
 
 @media screen and (min-width: 992px) {
