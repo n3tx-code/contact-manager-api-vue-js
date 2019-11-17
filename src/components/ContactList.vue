@@ -72,7 +72,6 @@ export default Vue.extend({
                   const facebook = 'facebook';
                   const twitter = 'twitter';
                   const website = 'website';
-                  const img = 'img';
                   const lastModification = 'lastModification';
                   contact.ID = c[ID];
                   contact.ID_owner = c[IDOwner];
@@ -86,7 +85,6 @@ export default Vue.extend({
                   contact.facebook = this.setToUndefinedIfNull(c[facebook]);
                   contact.twitter = this.setToUndefinedIfNull(c[twitter]);
                   contact.website = this.setToUndefinedIfNull(c[website]);
-                  contact.imgContact = this.setToUndefinedIfNull(c[img]);
                   contact.lastModification = c[lastModification];
                   this.contacts.push(contact);
                 });

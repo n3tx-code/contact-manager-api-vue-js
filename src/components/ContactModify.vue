@@ -93,15 +93,10 @@
                 <input type="text" class="form-control" placeholder="Site web" v-model="website">
             </div>
               
-              <div class="form-group">
-                <label >Photo du contact :</label>
-                <input type="file" class="form-control-file" :id="'contact-img-modify-' + contact.ID" @change="handelUploadFileType()">
-                <small>Type de fichier supportés : .png et .jpeg</small>
-              </div>
-              <div id="error-msg" class="bg-danger text-white text-center animated bounceIn" v-if="error_msg">
-                {{ error_msg }}
-              </div>
-              <button v-if="showBtnSubmit" type="submit" class="btn btn-contact-manager btn-block">Valider les modifications</button>
+            <div id="error-msg" class="bg-danger text-white text-center animated bounceIn" v-if="error_msg">
+              {{ error_msg }}
+            </div>
+            <button v-if="showBtnSubmit" type="submit" class="btn btn-contact-manager btn-block">Valider les modifications</button>
         </form>
     </div>
 </div>
@@ -149,27 +144,6 @@ export default Vue.extend({
         closeModal(): void {
             this.display = 'none';
         },
-        handelUploadFileType(): void {
-          const imgContactInput = document.getElementById('contact-img-modify-' + this.$props.contact.ID);
-          if (typeof imgContactInput!.files[0] !== 'undefined' || imgContactInput!.files[0] !== null) {
-            const type = imgContactInput!.files[0].type;
-            switch (type) {
-              case 'image/png':
-                this.showBtnSubmit = true;
-                this.error_msg = '';
-                break;
-              case 'image/jpeg':
-                this.showBtnSubmit = true;
-                this.error_msg = '';
-                break;
-              default:
-                this.showBtnSubmit = false;
-                this.error_msg = 'Type de fichier non supporté';
-            }
-          } else {
-            this.error_msg = '';
-          }
-        },
         submitContactModifyForm(): void {
           const imgContactInput = document.getElementById('contact-img');
           const formData = new FormData();
@@ -204,9 +178,6 @@ export default Vue.extend({
           }
           if (typeof this.website !== 'undefined') {
             formData.append('website', String(this.website));
-          }
-          if (typeof imgContactInput!.files[0] !== 'undefined' || imgContactInput!.files[0] !== null) {
-            formData.append('imgContact', imgContactInput!.files[0]);
           }
 
           axios.post('http://contact-manager/contact/update/', formData)

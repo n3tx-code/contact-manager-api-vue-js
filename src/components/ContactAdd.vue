@@ -93,11 +93,6 @@
                   <input type="text" class="form-control" placeholder="Site web" v-model="website">
                 </div>
               </div>
-              <div class="form-group">
-                <label >Photo du contact :</label>
-                <input type="file" class="form-control-file" id="contact-img" @change="handelUploadFileType()">
-                <small>Type de fichier supportés : .png et .jpeg</small>
-              </div>
               <div id="error-msg" class="bg-danger text-white text-center animated bounceIn" v-if="error_msg">
                 {{ error_msg }}
               </div>
@@ -192,9 +187,6 @@ export default Vue.extend({
           if (typeof this.website !== 'undefined') {
             formData.append('website', String(this.website));
           }
-          if (typeof imgContactInput!.files[0] !== 'undefined' || imgContactInput!.files[0] !== null) {
-            formData.append('imgContact', imgContactInput!.files[0]);
-          }
 
           axios.post('http://contact-manager/contact/add/', formData)
             .then((response) => {
@@ -226,28 +218,6 @@ export default Vue.extend({
             .catch((error) => {
               this.error_msg = 'Erreur de réseau';
             });
-        },
-        handelUploadFileType(): void {
-          const imgContactInput = document.getElementById('contact-img');
-          if (typeof imgContactInput!.files[0] !== 'undefined' || imgContactInput!.files[0] !== null) {
-            const type = imgContactInput!.files[0].type;
-            switch (type) {
-              case 'image/png':
-                this.showBtnSubmit = true;
-                this.error_msg = '';
-                break;
-              case 'image/jpeg':
-                this.showBtnSubmit = true;
-                this.error_msg = '';
-                break;
-              default:
-                this.error_msg = 'Type de fichier non supporté';
-                this.showBtnSubmit = false;
-            }
-          } else {
-            this.showBtnSubmit = true;
-            this.error_msg = '';
-          }
         },
       },
     });
