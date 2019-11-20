@@ -14,7 +14,7 @@
        v-bind:closeAddContactModal=this.closeAddContactModal v-bind:updateContacts=this.getContacts></contact-add>
       
     </div>
-    <div v-if="this.sucessMessage" class="bg-success text-white text-center" id="success-msg">
+    <div v-if="this.sucessMessage" class="bg-success text-white text-center animated bounceIn" id="success-msg">
       {{ this.sucessMessage }}
     </div>
     <div v-if="contacts.length == 0">
@@ -113,6 +113,15 @@ export default Vue.extend({
         },
         setSuccessMsg(msg: string): void {
           this.sucessMessage = msg;
+          setTimeout(this.hideSuccessMsg, 2000);
+        },
+        hideSuccessMsg(): void {
+          const successMsg = document.getElementById('success-msg')!;
+          successMsg.classList.remove('bounceIn');
+          successMsg.classList.add('fadeOut');
+          setTimeout(() => {
+            this.sucessMessage = '';
+          }, 500);
         },
         closeAddContactModal(): void {
           const modal = document.getElementById('addContactModal');
