@@ -34,7 +34,7 @@
               <div class="input-group-prepend">
                 <span class="input-group-text"><i class="fas fa-phone"></i></span>
               </div>
-              <input type="text" class="form-control" placeholder="Professionnel" v-model="phonePro">
+              <input type="text" class="form-control" placeholder="Professionnel" v-model="phonePro" @keyup="checkPhoneNumber(phonePro, 'Pro')">
             </div>
 
             <label>Téléphone personnel :</label>
@@ -42,7 +42,7 @@
               <div class="input-group-prepend">
                 <span class="input-group-text"><i class="fas fa-mobile-alt"></i></span>
               </div>
-              <input type="text" class="form-control" placeholder="Personnel" v-model="phonePerso">
+              <input type="text" class="form-control" placeholder="Personnel" v-model="phonePerso" @keyup="checkPhoneNumber(phonePerso, 'Perso')">
             </div>
 
             <label>Email professionnel :</label>
@@ -199,6 +199,15 @@ export default Vue.extend({
             .catch((error) => {
               this.error_msg = 'Erreur de réseau';
             });
+        },
+        checkPhoneNumber(phoneNumber: string, variable: string): void {
+          if (isNaN(Number(phoneNumber.slice(-1)))) {
+            if (variable === 'Pro') {
+              this.phonePro = phoneNumber.slice(0, -1);
+            } else if (variable === 'Perso') {
+              this.phonePerso = phoneNumber.slice(0, -1);
+            }
+          }
         },
     },
 });
