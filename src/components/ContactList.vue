@@ -33,83 +33,32 @@
 <script lang="ts">
 import Vue from 'vue';
 import axios from 'axios';
-import Contact from '@/models/contact.ts';
 import ContactItem from '@/components/ContactItem.vue';
 import ContactAdd from '@/components/ContactAdd.vue';
+import { mapState } from 'vuex';
+import contacts from '../store/modules/contacts';
 
 export default Vue.extend({
-    name: 'contact-list',
+  
     components: {
         ContactItem,
         ContactAdd,
     },
-    data(): {error_msg: string, sucessMessage: string, rechercheString: string, contacts: Contact[]} {
+    computed: {
+      ...mapState('contacts', ['contacts']),
+      ...mapState('contacts', ['token'])
+    },
+    data(): {error_msg: string, sucessMessage: string, rechercheString: string} {
         return {
             error_msg: '',
             sucessMessage: '',
             rechercheString : '',
-            contacts: Array<Contact>(),
         };
     },
-    props:
-    {
-      token: String,
-    },
+    
     methods: {
         getContacts(): void {
-          this.contacts = [];
-          const formData = new FormData();
-
-          formData.append('token', this.$props.token);
-          axios.post('http://contact-manager/contact/get/', formData)
-            .then((response) => {
-              if (response.data.hasOwnProperty('error')) {
-                // to avoid warning on run serve
-                const error = 'error';
-                this.error_msg = response.data[error];
-              } else {
-                response.data.forEach((c: string) => {
-                  const contact = <Contact> {};
-                  // to avoid npm run serve warning "object access via string literals is desallowed"
-                  const ID = 'ID';
-                  const IDOwner = 'ID_owner';
-                  const forname = 'forname';
-                  const name = 'name';
-                  const phonePro = 'phonePro';
-                  const phonePerso = 'phonePerso';
-                  const emailPerso = 'emailPerso';
-                  const emailPro = 'emailPro';
-                  const linkendin = 'linkendin';
-                  const facebook = 'facebook';
-                  const twitter = 'twitter';
-                  const website = 'website';
-                  const lastModification = 'lastModification';
-                  contact.ID = c[ID];
-                  contact.ID_owner = c[IDOwner];
-                  contact.forname = c[forname];
-                  contact.name = this.setToUndefinedIfNull(c[name]);
-                  contact.phonePro = this.setToUndefinedIfNull(c[phonePro]);
-                  contact.phonePerso = this.setToUndefinedIfNull(c[phonePerso]);
-                  contact.emailPro = this.setToUndefinedIfNull(c[emailPro]);
-                  contact.emailPerso = this.setToUndefinedIfNull(c[emailPerso]);
-                  contact.linkendin = this.setToUndefinedIfNull(c[linkendin]);
-                  contact.facebook = this.setToUndefinedIfNull(c[facebook]);
-                  contact.twitter = this.setToUndefinedIfNull(c[twitter]);
-                  contact.website = this.setToUndefinedIfNull(c[website]);
-                  contact.lastModification = c[lastModification];
-                  this.contacts.push(contact);
-                });
-              }
-            })
-            .catch((error) => {
-              this.error_msg = 'Erreur de réseau';
-            });
-        },
-        setToUndefinedIfNull(str: string) {
-          if (str === null) {
-            return undefined;
-          }
-          return str;
+          console.log('getContacts has been called');
         },
         setSuccessMsg(msg: string): void {
           this.sucessMessage = msg;
@@ -140,9 +89,6 @@ export default Vue.extend({
             }
           }
         },
-    },
-    beforeMount() {
-      this.getContacts();
     },
 });
 </script>
