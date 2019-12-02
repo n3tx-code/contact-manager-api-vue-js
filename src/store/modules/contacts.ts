@@ -26,7 +26,7 @@ const contacts: Module<{contacts: Contact[]}, any> = {
     },
     actions: {
       getContacts(context) {
-        const allContacts = Array<Contact>();
+        // avoid duplicate key error when reloading contacts
         const formData = new FormData();
         formData.append('token', context.rootState.token);
         axios.post('http://contact-manager/contact/get/', formData)

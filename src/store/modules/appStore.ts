@@ -1,11 +1,22 @@
 import { Module } from 'vuex';
 import router from '@/router';
+import store from '../store';
 
 const appStore: Module<{error_msg: string, sucessMessage: string}, any> = {
     namespaced: true,
     state: {
         error_msg : '',
         sucessMessage: '',
+    },
+    getters: {
+    },
+    mutations: {
+        setErrorMsg(state, msg) {
+            state.error_msg = msg;
+        },
+        setSuccessMsg(state, msg) {
+            state.sucessMessage = msg;
+        },
     },
     actions: {
         getToken(context) {

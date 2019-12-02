@@ -17,6 +17,9 @@
     <div v-if="this.sucessMessage" class="bg-success text-white text-center animated bounceIn" id="success-msg">
       {{ this.sucessMessage }}
     </div>
+    <div id="error-msg" class="bg-danger text-white text-center animated bounceIn" v-if="error_msg">
+        {{ error_msg }}
+    </div>
     <div v-if="contacts.length == 0">
       <h2 class="text-center no-contact-title">Auncu contact enregistré</h2>
     </div>
@@ -24,9 +27,6 @@
      v-bind:setSuccessMsg=setSuccessMsg v-bind:updateContacts=getContacts :rechercheString="rechercheString">
     </contact-item>
 
-    <div id="error-msg" class="bg-danger text-white text-center animated bounceIn" v-if="error_msg">
-        {{ error_msg }}
-    </div>
   </div>
 </template>
 
@@ -47,22 +47,23 @@ export default Vue.extend({
     },
     computed: {
       ...mapState('contacts', ['contacts']),
-      ...mapState('appStore', ['token']),
+      ...mapState('appStore', ['error_msg']),
+      ...mapState('appStore', ['sucessMessage']),
     },
-    data(): {error_msg: string, sucessMessage: string, rechercheString: string} {
+    data(): {token: string, rechercheString: string} {
         return {
-            error_msg: '',
-            sucessMessage: '',
+            token: 'WdPTuS5asrOmaHKfU',
             rechercheString : '',
         };
     },
 
     methods: {
         getContacts(): void {
-          console.log('getContacts has been called');
+          this.$store.commit('contacts/clearContacts');
+          this.$store.dispatch('contacts/getContacts');
         },
         setSuccessMsg(msg: string): void {
-          this.sucessMessage = msg;
+          this.$store.commit('appStore/setSuccessMsg', msg);
           setTimeout(this.hideSuccessMsg, 2000);
         },
         hideSuccessMsg(): void {
@@ -70,7 +71,7 @@ export default Vue.extend({
           successMsg.classList.remove('bounceIn');
           successMsg.classList.add('fadeOut');
           setTimeout(() => {
-            this.sucessMessage = '';
+            this.$store.commit('appStore/setSuccessMsg', '');
           }, 500);
         },
         closeAddContactModal(): void {
