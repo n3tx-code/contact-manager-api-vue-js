@@ -30,8 +30,11 @@
 <script lang="ts">
 import Vue from 'vue';
 import router from '@/router';
+import { mapState } from 'vuex';
 import ContactList from '@/components/ContactList.vue';
-import contacts from '../store/modules/contacts';
+import contacts from '@/store/modules/contacts';
+import appStore from '@/store/modules/appStore';
+
 
 export default Vue.extend({
   name: 'ContactManagerApp',
@@ -41,12 +44,12 @@ export default Vue.extend({
   methods:
   {
     logOut(): void {
-      this.$store.commit('contacts/logout');
+      this.$store.commit('contacts/clearContacts');
+      this.$store.dispatch('appStore/logout');
     },
   },
   beforeMount() {
-    this.$store.dispatch('contacts/getToken');
-    this.$store.dispatch('contacts/getContacts')
+    this.$store.dispatch('appStore/getToken');
   },
 });
 </script>

@@ -36,17 +36,18 @@ import axios from 'axios';
 import ContactItem from '@/components/ContactItem.vue';
 import ContactAdd from '@/components/ContactAdd.vue';
 import { mapState } from 'vuex';
-import contacts from '../store/modules/contacts';
+import contacts from '@/store/modules/contacts';
+import appStore from '@/store/modules/appStore';
 
 export default Vue.extend({
-  
+
     components: {
         ContactItem,
         ContactAdd,
     },
     computed: {
       ...mapState('contacts', ['contacts']),
-      ...mapState('contacts', ['token'])
+      ...mapState('appStore', ['token']),
     },
     data(): {error_msg: string, sucessMessage: string, rechercheString: string} {
         return {
@@ -55,7 +56,7 @@ export default Vue.extend({
             rechercheString : '',
         };
     },
-    
+
     methods: {
         getContacts(): void {
           console.log('getContacts has been called');
@@ -89,6 +90,9 @@ export default Vue.extend({
             }
           }
         },
+    },
+    beforeMount() {
+      this.$store.dispatch('contacts/getContacts');
     },
 });
 </script>
