@@ -2,7 +2,7 @@
   <div class="contact-wrapper" v-if="show">
     <div class="row">
       <div class="col-12" :style="'background-color : #' + color + ';'" :class="'text-' + textColor + ' text-center contact-initials'">
-          <contact-modify :contact="contact" :token="token" v-bind:setSuccessMsg=this.setSuccessMsg v-bind:updateContacts=this.updateContacts></contact-modify>
+          <contact-modify :contact="contact"></contact-modify>
           <h2>{{ initials }}</h2>
       </div>
     </div>
@@ -41,18 +41,19 @@
             <i class="fab fa-facebook"></i> : <strong><a :href="contact.facebook">{{ contact.facebook }}</a></strong>
           </div>
           <div class="col-md-6">
-            <i class="fab fa-linkedin-in"></i> : <strong>{{ contact.linkendin }}</strong>
+            <i class="fab fa-linkedin-in"></i> : <strong><a :href="contact.linkendin"> {{ contact.linkendin }}</a>
+            </strong>
           </div>
           <div class="col-md-6">
-            <i class="fab fa-twitter"></i> : <strong>{{ contact.twitter }}</strong>
+            <i class="fab fa-twitter"></i> : <strong><a :href="contact.twitter">{{ contact.twitter }}</a></strong>
           </div>
           <div class="col-md-6">
-            <i class="fas fa-link"></i> : <strong>{{ contact.website }}</strong>
+            <i class="fas fa-link"></i> : <strong><a :href="contact.website"> {{contact.website }}</a></strong>
           </div>
         </div>
       </div>
       <div class="col-12 contact-footer">
-        <contact-delete :contact="contact" :token="token" v-bind:setSuccessMsg=this.setSuccessMsg v-bind:updateContacts=this.updateContacts></contact-delete>
+        <contact-delete :contactId="contact.ID" :contactIdOwner="contact.ID_owner" :contactForname="contact.forname"></contact-delete>
         <small class="contact-last-modification">Dernière modification : {{ getLastModificationDate() }}</small>
       </div>
     </div>
@@ -66,8 +67,9 @@ import Contact from '@/models/contact.ts';
 import ContactModify from '@/components/ContactModify.vue';
 import ContactDelete from '@/components/ContactDelete.vue';
 import tinycolor from 'tinycolor2';
-
-// const tinycolor = require("tinycolor2");
+import { mapState } from 'vuex';
+import contacts from '@/store/modules/contacts';
+import appStore from '@/store/modules/appStore';
 
 export default Vue.extend({
     name: 'contact-display',
@@ -86,14 +88,9 @@ export default Vue.extend({
     props:
     {
       contact: Object as () => Contact,
-      modifyContactBtn: Function,
-      token: String,
-      setSuccessMsg: Function,
-      updateContacts: Function,
       rechercheString: String,
     },
     methods: {
-      /* tslint:disable:no-bitwise */
       hashCode(str: string): number {
         let hash = 0;
         for (let i = 0; i < str.length; i++) {
@@ -127,17 +124,14 @@ export default Vue.extend({
         if (bgColor.isLight()) {
           textColor = 'dark';
         }
-
         this.textColor = textColor;
       },
       getLastModificationDate(): string {
         const lastModification = new Date(this.contact.lastModification);
-
         return lastModification.toLocaleDateString();
       },
       isInReSearch(): void {
         if (this.$props.rechercheString.trim().length > 0) {
-
           if (this.$props.contact.forname.toUpperCase().includes(this.$props.rechercheString.toUpperCase())) {
             this.show = true;
           } else {

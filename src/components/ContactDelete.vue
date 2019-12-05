@@ -11,7 +11,7 @@
               <button type="button" class="btn btn-info close float-right text-white" @click=closeModal()>&times;</button>
           </div>
         </div>
-        <h4 class="text-center">Voulez-vous supprimer {{ contact.forname }} ?</h4>
+        <h4 class="text-center">Voulez-vous supprimer {{ contactForname }} ?</h4>
         <div class="row btn-delete-choise">
           <div class="col-6 col-md-3 offset-md-3">
               <button type="button" class="btn btn-light btn-block" @click=deleteContact()>Oui</button>
@@ -29,21 +29,21 @@
 import Vue from 'vue';
 import Contact from '@/models/contact.ts';
 import axios from 'axios';
+import appStore from '@/store/modules/appStore';
+import contacts from '@/store/modules/contacts';
 
 export default Vue.extend({
     name: 'contact-delete',
-    data(): {display: string, error_msg: string} {
+    data(): {display: string } {
         return {
             display: 'none',
-            error_msg: '',
         };
     },
     props:
     {
-      token: String,
-      contact: Object as () => Contact,
-      setSuccessMsg: Function,
-      updateContacts: Function,
+      contactId: Number,
+      contactIdOwner: Number,
+      contactForname: String,
     },
     methods: {
         displayModal(): void {
@@ -53,30 +53,8 @@ export default Vue.extend({
             this.display = 'none';
         },
         deleteContact(): void {
-          const formData = new FormData();
-
-          formData.append('ID', this.$props.contact.ID);
-          formData.append('ID_owner', this.$props.contact.ID_owner);
-          formData.append('token', this.$props.token);
-
-          axios.post('http://contact-manager/contact/delete/', formData)
-            .then((response) => {
-              if (response.data.hasOwnProperty('error')) {
-                const error = 'error';
-                this.error_msg = response.data[error];
-              } else {
-                if (response.data === 'Contact deleted') {
-                    this.updateContacts();
-                    this.closeModal();
-                    this.setSuccessMsg(this.contact.forname + ' a été supprimé');
-                } else {
-                  this.error_msg = 'Erreur lors de la suppression du contact';
-                }
-              }
-            })
-            .catch((error) => {
-              this.error_msg = 'Erreur de réseau';
-            });
+          this.$store.dispatch('contacts/deleteContact', { contactId: this.$props.contactId,
+          contactIdOwner: this.$props.contactIdOwner, contactForname: this.$props.contactForname });
         },
     },
 });

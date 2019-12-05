@@ -107,6 +107,8 @@
 import Vue from 'vue';
 import Contact from '@/models/contact.ts';
 import axios from 'axios';
+import { mapState } from 'vuex';
+import appStore from '@/store/modules/appStore';
 
 
 export default Vue.extend({
@@ -132,10 +134,7 @@ export default Vue.extend({
     },
     props:
     {
-      token: String,
       contact: Object as () => Contact,
-      setSuccessMsg: Function,
-      updateContacts: Function,
     },
     methods: {
         displayModal(): void {
@@ -145,60 +144,21 @@ export default Vue.extend({
             this.display = 'none';
         },
         submitContactModifyForm(): void {
-          const imgContactInput = document.getElementById('contact-img');
-          const formData = new FormData();
-
-          formData.append('ID', this.$props.contact.ID);
-          formData.append('ID_owner', this.$props.contact.ID_owner);
-          formData.append('token', this.$props.token);
-          formData.append('forName', this.forname);
-          if (typeof this.name !== 'undefined') {
-            formData.append('name', this.name);
-          }
-          if (typeof this.phonePro !== 'undefined') {
-            formData.append('phonePro', String(this.phonePro));
-          }
-          if (typeof this.phonePerso !== 'undefined') {
-            formData.append('phonePerso', String(this.phonePerso));
-          }
-          if (typeof this.emailPro !== 'undefined') {
-            formData.append('emailPro', String(this.emailPro));
-          }
-          if (typeof this.emailPerso !== 'undefined') {
-            formData.append('emailPerso', String(this.emailPerso));
-          }
-          if (typeof this.linkendin !== 'undefined') {
-            formData.append('linkendin', String(this.linkendin));
-          }
-          if (typeof this.facebook !== 'undefined') {
-            formData.append('facebook', String(this.facebook));
-          }
-          if (typeof this.twitter !== 'undefined') {
-            formData.append('twitter', String(this.twitter));
-          }
-          if (typeof this.website !== 'undefined') {
-            formData.append('website', String(this.website));
-          }
-
-          axios.post('http://contact-manager/contact/update/', formData)
-            .then((response) => {
-              if (response.data.hasOwnProperty('error')) {
-                // to avoid warning on run serve
-                const error = 'error';
-                this.error_msg = response.data[error];
-              } else {
-                if (response.data === 'Contact modified') {
-                    this.updateContacts();
-                    this.closeModal();
-                    this.setSuccessMsg(this.forname + ' a été modifié');
-                } else {
-                  this.error_msg = 'Erreur lors de la modification du contact';
-                }
-              }
-            })
-            .catch((error) => {
-              this.error_msg = 'Erreur de réseau';
-            });
+          const c: object = {
+            ID: this.$props.contact.ID,
+            ID_owner: this.$props.contact.ID_owner,
+            name: this.name,
+            forname: this.forname,
+            phonePro: this.phonePro,
+            phonePerso: this.phonePerso,
+            emailPro: this.emailPro,
+            emailPerso: this.emailPerso,
+            linkendin: this.linkendin,
+            facebook: this.facebook,
+            twitter: this.twitter,
+            website: this.website,
+          };
+          this.$store.dispatch('contacts/modifyContact', c);
         },
         checkPhoneNumber(phoneNumber: string, variable: string): void {
           if (isNaN(Number(phoneNumber.slice(-1)))) {

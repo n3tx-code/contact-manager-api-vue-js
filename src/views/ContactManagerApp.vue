@@ -22,7 +22,7 @@
   <div class="container" id="app-wrapper"> 
   
     <div class="wrapper-fluid">
-      <contact-list v-bind:token=this.token></contact-list>
+      <contact-list></contact-list>
     </div>
   </div>
 </div>
@@ -30,42 +30,26 @@
 <script lang="ts">
 import Vue from 'vue';
 import router from '@/router';
+import { mapState } from 'vuex';
 import ContactList from '@/components/ContactList.vue';
+import contacts from '@/store/modules/contacts';
+import appStore from '@/store/modules/appStore';
+
 
 export default Vue.extend({
   name: 'ContactManagerApp',
-  data(): {token: string} {
-    return {
-      token: '',
-    };
-  },
   components: {
     ContactList,
   },
   methods:
   {
-    getToken(): void {
-      if (document.cookie.length > 0) {
-          const dataFromCookie = JSON.parse(document.cookie);
-          if (dataFromCookie.hasOwnProperty('token')) {
-              // to avoid warning on run serve
-              const token = 'token';
-              this.token = dataFromCookie[token];
-          } else {
-            router.push({name: 'home'});
-          }
-      } else {
-        router.push({name: 'home'});
-      }
-    },
     logOut(): void {
-      const expires = 'expires=Thu, 01 Jan 1970 00:00:00 UTC';
-      document.cookie = JSON.stringify('null') + ';' + expires + ';';
-      router.push({name: 'home'});
+      this.$store.commit('contacts/clearContacts');
+      this.$store.dispatch('appStore/logout');
     },
   },
   beforeMount() {
-        this.getToken();
+    this.$store.dispatch('appStore/getToken');
   },
 });
 </script>

@@ -1,10 +1,11 @@
 <template>
+<div class="modal">
   <form id="contact-add" @submit.prevent="submitContactAddForm()" enctype="multipart/form-data">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
           <div class="modal-header">
             <h5 class="modal-title" id="exampleModalLongTitle">Ajout d'un contact</h5>
-            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close" @click=hideModal()>
               <span aria-hidden="true">&times;</span>
             </button>
           </div>
@@ -98,33 +99,37 @@
               </div>
           </div>
           <div class="modal-footer">
-            <div class="row col-12">
+            <div class="row">
               <div class="col-6">
-                <button type="button" class="btn btn-secondary btn-block" data-dismiss="modal">Fermer</button>
+                <button type="button" class="btn btn-secondary btn-block" @click="hideModal()">Fermer</button>
               </div>
               <div class="col-6" v-if="this.showBtnSubmit">
-                <button type="submit" class="btn btn-contact-manager btn-block">Ajouter <i class="fas fa-plus-circle"></i></button>
+                <button type="submit" class="btn btn-contact-manager btn-block">Ajouter <i class="fas fa-plus-circle d-none d-sm-block d-sm-none d-md-block"></i></button>
               </div>
             </div>
           </div>
         </div>
       </div>
   </form>
+</div>
 </template>
 
 <script lang="ts">
 import Vue from 'vue';
 import axios from 'axios';
+import { mapState } from 'vuex';
+import Contact from '@/models/contact';
+import contacts from '@/store/modules/contacts';
+import appStore from '@/store/modules/appStore';
 
 export default Vue.extend({
     name: 'contact-add',
-    data(): {moreDetails: boolean, showBtnSubmit: boolean, error_msg: string, option_txt: string, name?: string,
+    data(): {moreDetails: boolean, showBtnSubmit: boolean, option_txt: string, name?: string,
     forName: string, phonePro?: string, phonePerso?: string, emailPro?: string, emailPerso?: string, linkendin?: string,
     facebook?: string, twitter?: string, website?: string} {
         return {
             moreDetails: false,
             showBtnSubmit: true,
-            error_msg: '',
             option_txt: 'Plus d\'options <i class="fas fa-caret-down"></i>',
             name: undefined,
             forName: '',
@@ -140,10 +145,11 @@ export default Vue.extend({
     },
     props:
     {
-      token: String,
-      setSuccessMsg: Function,
-      closeAddContactModal: Function,
-      updateContacts: Function,
+      hideModal: Function,
+    },
+    computed: {
+      ...mapState('appStore', ['sucessMessage']),
+      ...mapState('appStore', ['error_msg']),
     },
     methods: {
         toggleOptions(): void {
@@ -155,69 +161,19 @@ export default Vue.extend({
           this.moreDetails = !this.moreDetails;
         },
         submitContactAddForm(): void {
-          const imgContactInput = document.getElementById('contact-img');
-          const formData = new FormData();
-
-          formData.append('forName', this.forName);
-          formData.append('token', this.$props.token);
-          if (typeof this.name !== 'undefined') {
-            formData.append('name', this.name);
-          }
-          if (typeof this.phonePro !== 'undefined') {
-            formData.append('phonePro', String(this.phonePro));
-          }
-          if (typeof this.phonePerso !== 'undefined') {
-            formData.append('phonePerso', String(this.phonePerso));
-          }
-          if (typeof this.emailPro !== 'undefined') {
-            formData.append('emailPro', String(this.emailPro));
-          }
-          if (typeof this.emailPerso !== 'undefined') {
-            formData.append('emailPerso', String(this.emailPerso));
-          }
-          if (typeof this.linkendin !== 'undefined') {
-            formData.append('linkendin', String(this.linkendin));
-          }
-          if (typeof this.facebook !== 'undefined') {
-            formData.append('facebook', String(this.facebook));
-          }
-          if (typeof this.twitter !== 'undefined') {
-            formData.append('twitter', String(this.twitter));
-          }
-          if (typeof this.website !== 'undefined') {
-            formData.append('website', String(this.website));
-          }
-
-          axios.post('http://contact-manager/contact/add/', formData)
-            .then((response) => {
-              if (response.data.hasOwnProperty('error')) {
-                // to avoid warning on run serve
-                const error = 'error';
-                this.error_msg = response.data[error];
-              } else {
-                if (response.data === 'Contact added') {
-                    this.error_msg = '';
-                    this.$props.closeAddContactModal();
-                    this.$props.setSuccessMsg(this.forName + ' a été ajouté.');
-                    this.forName = '';
-                    this.name = undefined;
-                    this.phonePro = undefined;
-                    this.phonePerso = undefined;
-                    this.emailPro = undefined;
-                    this.emailPerso = undefined;
-                    this.linkendin = undefined;
-                    this.facebook = undefined;
-                    this.twitter = undefined;
-                    this.website = undefined;
-                    this.$props.updateContacts();
-                } else {
-                  this.error_msg = 'Erreur lors de la création du contact';
-                }
-              }
-            })
-            .catch((error) => {
-              this.error_msg = 'Erreur de réseau';
-            });
+          const c: object = {
+            name: this.name,
+            forname: this.forName,
+            phonePro: this.phonePro,
+            phonePerso: this.phonePerso,
+            emailPro: this.emailPro,
+            emailPerso: this.emailPerso,
+            linkendin: this.linkendin,
+            facebook: this.facebook,
+            twitter: this.twitter,
+            website: this.website,
+          };
+          this.$store.dispatch('contacts/addContact', c);
         },
         checkPhoneNumber(phoneNumber: string, variable: string): void {
           if (isNaN(Number(phoneNumber.slice(-1)))) {
@@ -233,5 +189,38 @@ export default Vue.extend({
 </script>
 
 <style scoped lang="scss">
-    
+.modal {
+  display: block;
+  position: fixed;
+  z-index: 2;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: auto;
+  background-color: rgb(0, 0, 0);
+  background-color: rgba(0, 0, 0, 0.4);
+}
+
+.modal-content {
+  background-color: #fefefe;
+  margin: 5% auto;
+  padding: 20px;
+  border: 1px solid #888;
+  width: 90%;
+}
+
+.close {
+  color: #aaa;
+  float: right;
+  font-size: 28px;
+  font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+  color: black;
+  text-decoration: none;
+  cursor: pointer;
+}
 </style>
