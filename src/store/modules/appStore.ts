@@ -2,14 +2,12 @@ import { Module } from 'vuex';
 import router from '@/router';
 import store from '../store';
 
-const appStore: Module<{error_msg: string, sucessMessage: string, token: string,
-displayAddContactModal: boolean}, any> = {
+const appStore: Module<{error_msg: string, sucessMessage: string, token: string}, any> = {
     namespaced: true,
     state: {
         error_msg : '',
         sucessMessage : '',
         token : '',
-        displayAddContactModal : false,
     },
     mutations: {
         setErrorMsg(state, msg) {

@@ -22,8 +22,7 @@
     <div v-if="contacts.length == 0">
       <h2 class="text-center no-contact-title">Auncu contact enregistré</h2>
     </div>
-    <contact-item v-for="contact in contacts" :key="contact.ID" :contact="contact" v-bind:token=token
-     v-bind:setSuccessMsg=setSuccessMsg v-bind:updateContacts=getContacts :rechercheString="rechercheString">
+    <contact-item v-for="contact in contacts" :key="contact.ID" :contact="contact" :rechercheString="rechercheString">
     </contact-item>
 
   </div>
@@ -84,6 +83,12 @@ export default Vue.extend({
     },
     beforeMount() {
       this.$store.dispatch('contacts/getContacts');
+    },
+    beforeUpdate() {
+      if (this.sucessMessage) {
+        this.hideAddContactModal();
+        setTimeout(this.hideSuccessMsg, 2000);
+      }
     },
 });
 </script>
