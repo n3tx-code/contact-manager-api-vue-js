@@ -2,13 +2,14 @@ import { Module } from 'vuex';
 import router from '@/router';
 import store from '../store';
 
-const appStore: Module<{error_msg: string, sucessMessage: string}, any> = {
+const appStore: Module<{error_msg: string, sucessMessage: string, token: string,
+displayAddContactModal: boolean}, any> = {
     namespaced: true,
     state: {
         error_msg : '',
-        sucessMessage: '',
-    },
-    getters: {
+        sucessMessage : '',
+        token : '',
+        displayAddContactModal : false,
     },
     mutations: {
         setErrorMsg(state, msg) {
@@ -17,7 +18,7 @@ const appStore: Module<{error_msg: string, sucessMessage: string}, any> = {
         setSuccessMsg(state, msg) {
             state.sucessMessage = msg;
         },
-    },
+      },
     actions: {
         getToken(context) {
             if (document.cookie.length > 0) {
@@ -25,7 +26,7 @@ const appStore: Module<{error_msg: string, sucessMessage: string}, any> = {
                 if (dataFromCookie.hasOwnProperty('token')) {
                     // to avoid warning on run serve
                     const token = 'token';
-                    context.rootState.token = dataFromCookie[token];
+                    this.state.token = dataFromCookie[token];
                 } else {
                   router.push({name: 'home'});
                 }
@@ -34,7 +35,7 @@ const appStore: Module<{error_msg: string, sucessMessage: string}, any> = {
             }
           },
           logout(context) {
-            context.rootState.token = '';
+            this.state.token = '';
             const expires = 'expires=Thu, 01 Jan 1970 00:00:00 UTC';
             document.cookie = JSON.stringify('null') + ';' + expires + ';';
             router.push({name: 'home'});

@@ -127,7 +127,7 @@ export default Vue.extend({
         if (bgColor.isLight()) {
           textColor = 'dark';
         }
-
+        
         this.textColor = textColor;
       },
       getLastModificationDate(): string {

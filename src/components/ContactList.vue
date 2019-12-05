@@ -8,10 +8,9 @@
       </div>
     </div>
 
-    <button type="button" class="btn btn-block btn-contact-manager" data-toggle="modal" data-target="#addContactModal">Ajouter un contact</button>
-    <div class="modal fade" id="addContactModal" tabindex="-1" role="dialog">
-      <contact-add v-bind:token=this.token v-bind:setSuccessMsg=this.setSuccessMsg
-       v-bind:closeAddContactModal=this.closeAddContactModal v-bind:updateContacts=this.getContacts></contact-add>
+    <button type="button" class="btn btn-block btn-contact-manager" @click="showAddContactModal">Ajouter un contact</button>
+    <div v-if="this.displayAddContactModal && !this.sucessMessage">
+      <contact-add v-bind:hideModal=this.hideAddContactModal></contact-add>
       
     </div>
     <div v-if="this.sucessMessage" class="bg-success text-white text-center animated bounceIn" id="success-msg">
@@ -49,11 +48,12 @@ export default Vue.extend({
       ...mapState('contacts', ['contacts']),
       ...mapState('appStore', ['error_msg']),
       ...mapState('appStore', ['sucessMessage']),
+      ...mapState('appStore', ['token']),
     },
-    data(): {token: string, rechercheString: string} {
+    data(): {rechercheString: string, displayAddContactModal: boolean} {
         return {
-            token: 'WdPTuS5asrOmaHKfU',
             rechercheString : '',
+            displayAddContactModal : false,
         };
     },
 
@@ -74,22 +74,12 @@ export default Vue.extend({
             this.$store.commit('appStore/setSuccessMsg', '');
           }, 500);
         },
-        closeAddContactModal(): void {
-          const modal = document.getElementById('addContactModal');
-          if (modal !== null) {
-            modal.classList.remove('show');
-            modal.setAttribute('aria-hidden', 'true');
-            modal.removeAttribute('aria-modal');
-            modal.setAttribute('style', 'display: none');
-            document.body.classList.remove('modal-open');
-            document.body.removeAttribute('style');
-
-            const modalsBackdrops = document.getElementsByClassName('modal-backdrop');
-
-            for (const modalsBackdrop of modalsBackdrops) {
-              document.body.removeChild(modalsBackdrop);
-            }
-          }
+        showAddContactModal(): void {
+          this.displayAddContactModal = true;
+          this.$store.commit('appStore/setSuccessMsg', '');
+        },
+        hideAddContactModal(): void {
+          this.displayAddContactModal = false;
         },
     },
     beforeMount() {
