@@ -9,7 +9,7 @@
         <form class="modal-content text-left text-dark" @submit.prevent="submitContactModifyForm()" enctype="multipart/form-data">
             <div class="row text-center">
                 <div class="col-12">
-                    <button type="button" class="btn btn-info close float-right" @click=closeModal()>&times;</button>
+                    <button type="button" class="btn btn-info close float-right btn-close-modify" @click=closeModal()>&times;</button>
                     <h4>{{ contact.forname }}</h4>
                 </div>
             </div>

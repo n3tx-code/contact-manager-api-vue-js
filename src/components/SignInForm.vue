@@ -3,19 +3,19 @@
     <form @submit.prevent="submitSignInForm()">
         <div class="form-group">
             <label>Adresse mail :</label>
-            <input v-model="email" type="email" class="form-control" placeholder="Email" required>
+            <input v-model="email" type="email" class="form-control" placeholder="Email" id="email1" required>
         </div>
         <div class="form-group">
             <label>Confirmation adresse mail :</label>
-            <input v-model="emailConfirmation" type="email" class="form-control" placeholder="Confirmation email" required @keyup="compareEmail()">
+            <input v-model="emailConfirmation" type="email" class="form-control" id="email2" placeholder="Confirmation email" required @keyup="compareEmail()">
         </div>
         <div class="form-group">
             <label>Mot de passe :</label>
-            <input v-model="pwd" type="password" class="form-control" placeholder="Mot de passe" required >
+            <input v-model="pwd" type="password" class="form-control" placeholder="Mot de passe" required id="pwd1">
         </div>
         <div class="form-group">
             <label>Confirmation mot de passe :</label>
-            <input v-model="pwdConfirmation" type="password" class="form-control" placeholder="Confirmation mot de passe" required @keyup="comparePwd()">
+            <input v-model="pwdConfirmation" type="password" class="form-control" placeholder="Confirmation mot de passe" required @keyup="comparePwd()" id="pwd2">
             
         </div>
         <div id="error-msg" class="bg-danger text-white text-center animated bounceIn" v-if="error_msg">

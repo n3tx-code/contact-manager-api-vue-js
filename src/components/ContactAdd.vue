@@ -104,7 +104,7 @@
                 <button type="button" class="btn btn-secondary btn-block" @click="hideModal()">Fermer</button>
               </div>
               <div class="col-6" v-if="this.showBtnSubmit">
-                <button type="submit" class="btn btn-contact-manager btn-block">Ajouter <i class="fas fa-plus-circle d-none d-sm-block d-sm-none d-md-block"></i></button>
+                <button type="submit" class="btn btn-contact-manager btn-block" id="add-btn">Ajouter <i class="fas fa-plus-circle d-none d-sm-block d-sm-none d-md-block"></i></button>
               </div>
             </div>
           </div>

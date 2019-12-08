@@ -1,6 +1,6 @@
 <template>
   <div class="contact-delete float-right">
-    <button type="button" class="btn btn-danger" @click=displayModal()>
+    <button type="button" class="btn btn-danger btn-delete" @click=displayModal()>
       <i class="fas fa-trash-alt"></i>
     </button>
 
