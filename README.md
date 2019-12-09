@@ -1,5 +1,8 @@
 # contact_manager
 
+## Démo
+La démo du projet est disponible à l'adresse suivante : [contact-manager.vaede.com](http://contact-manager.vaede.com)
+
 ## Installation
 Installer WAMPP ou XAMPP ou MAMPP en fonction de votre système d'exploitatation.
 Créer un dossier *contact-manager* et un virtual host qui pointe vers celui-ci. L'adresse du virtual host doit être **contact-manager**.
